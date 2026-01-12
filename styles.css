@@ -54,14 +54,17 @@ body {
   --gsize: 80px;
   --hx: -200px;
   --hy: -200px;
+  --hcolor: rgba(0, 0, 0, 0.12);
   background:
-    linear-gradient(rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.12)) var(--hx) var(--hy) / var(--gsize) 1px no-repeat,
-    linear-gradient(rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.12)) var(--hx) calc(var(--hy) + var(--gsize) - 1px) / var(--gsize) 1px no-repeat,
-    linear-gradient(rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.12)) var(--hx) var(--hy) / 1px var(--gsize) no-repeat,
-    linear-gradient(rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.12)) calc(var(--hx) + var(--gsize) - 1px) var(--hy) / 1px var(--gsize) no-repeat;
+    linear-gradient(var(--hcolor), var(--hcolor)) var(--hx) var(--hy) / var(--gsize) 1px no-repeat,
+    linear-gradient(var(--hcolor), var(--hcolor)) var(--hx) calc(var(--hy) + var(--gsize) - 1px) / var(--gsize) 1px no-repeat,
+    linear-gradient(var(--hcolor), var(--hcolor)) var(--hx) var(--hy) / 1px var(--gsize) no-repeat,
+    linear-gradient(var(--hcolor), var(--hcolor)) calc(var(--hx) + var(--gsize) - 1px) var(--hy) / 1px var(--gsize) no-repeat;
   mix-blend-mode: multiply;
   opacity: 0;
   transition: opacity 0.2s ease;
+  transform: rotateY(0deg);
+  transform-style: preserve-3d;
 }
 
 #loading-overlay {
