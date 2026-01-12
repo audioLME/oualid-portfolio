@@ -59,9 +59,9 @@ body {
 }
 
 #bg-highlight-cell {
-  position: absolute;
-  left: var(--hx);
-  top: var(--hy);
+  position: fixed;
+  left: var(--fx, -200px);
+  top: var(--fy, -200px);
   width: var(--gsize);
   height: var(--gsize);
   border: 1px solid rgba(0, 0, 0, 0.06);
@@ -71,6 +71,8 @@ body {
   transform-origin: 50% 50%;
   transform-style: preserve-3d;
   will-change: transform, background, border-color, box-shadow;
+  pointer-events: none;
+  z-index: 1;
 }
 
 #loading-overlay {
