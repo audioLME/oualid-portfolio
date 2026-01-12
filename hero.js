@@ -8,20 +8,19 @@
 const container = document.getElementById("hero-letters");
 let wordIndex = 0;
 
-function getLeft(index) {
-  return `${index * 10}%`;
-}
-
 function showWord(word) {
   container.innerHTML = "";
 
   const letters = word.split("");
 
+  const containerWidth = container.offsetWidth;
+  const spacing = containerWidth / letters.length;
+
   letters.forEach((char, i) => {
     const el = document.createElement("div");
     el.className = "letter";
     el.textContent = char === " " ? "\u00A0" : char;
-    el.style.left = getLeft(i);
+    el.style.left = `${i * spacing}px`;
     container.appendChild(el);
   });
 
