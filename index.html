@@ -84,7 +84,6 @@
       const cellY = Math.floor(y / gridSize) * gridSize;
       highlight.style.setProperty('--hx', `${cellX}px`);
       highlight.style.setProperty('--hy', `${cellY}px`);
-      highlightCell.style.transformOrigin = `${cellX + gridSize / 2}px ${cellY + gridSize / 2}px`;
       highlight.style.opacity = '1';
     }
 
@@ -100,15 +99,15 @@
         rotationY: 180,
         duration: 0.35,
         ease: 'power2.in',
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        borderColor: 'rgba(0, 0, 0, 0.8)',
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        borderColor: 'rgba(0, 0, 0, 0.9)',
         boxShadow: '0 0 14px rgba(0,0,0,0.4)'
       })
         .to(highlightCell, {
           rotationY: 0,
           duration: 0.35,
           ease: 'power2.out',
-          backgroundColor: 'rgba(0, 0, 0, 0.06)',
+          backgroundColor: 'rgba(0, 0, 0, 0.04)',
           borderColor: 'rgba(0, 0, 0, 0.12)',
           boxShadow: '0 0 14px rgba(0,0,0,0.16)'
         });
