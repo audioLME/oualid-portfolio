@@ -117,7 +117,12 @@
     });
 
     // Click flip for highlighted cell
+    let isFlipping = false;
+
     function flipHighlight() {
+      if (isFlipping) return;
+      isFlipping = true;
+
       const tl = gsap.timeline();
       tl.to(highlightCell, {
         rotationY: 180,
@@ -133,7 +138,10 @@
           ease: 'power2.out',
           backgroundColor: 'rgba(0, 0, 0, 0)',
           borderColor: 'rgba(0, 0, 0, 0.06)',
-          boxShadow: '0 0 14px rgba(0,0,0,0.16)'
+          boxShadow: '0 0 14px rgba(0,0,0,0.16)',
+          onComplete: () => {
+            isFlipping = false;
+          }
         });
     }
 
