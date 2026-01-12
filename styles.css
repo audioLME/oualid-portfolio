@@ -54,10 +54,6 @@ body {
   font-weight: 700;
 }
 
-.logo span {
-  display: inline-block;
-}
-
 .nav {
   display: flex;
   gap: 32px;
