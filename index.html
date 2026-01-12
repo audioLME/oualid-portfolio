@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Oualid Meghlaoui</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+    <!-- Background Lines -->
+    <div id="bg-lines"></div>
+    <div id="bg-highlight"></div>
+    <div id="flip-cell"></div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay"></div>
+
+    <!-- Version Indicator -->
+    <div id="version-indicator">v0.0.82</div>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="logo"><span>O</span><span>U</span><span>A</span><span>L</span><span>I</span><span>D</span><span>&nbsp;</span><span>M</span><span>E</span><span>G</span><span>H</span><span>L</span><span>A</span><span>O</span><span>U</span><span>I</span></div>
+
+    <nav class="nav">
+      <a href="#">RESUME</a>
+      <a href="#">PORTFOLIO</a>
+      <a href="#">CONTACT</a>
+    </nav>
+
+    <div class="meta" id="time-display">Algeria&nbsp;&nbsp;&nbsp;⧗&nbsp;&nbsp;&nbsp;00:00 AM&nbsp;&nbsp;&nbsp;Jan 1, 2026</div>
+  </header>
+
+  <!-- HERO -->
+  <main class="hero">
+    <div id="animation-box"></div>
+
+    <section class="hero-text">
+      <span class="label">(I AM)</span>
+      <h1>
+        The architecture-first<br />
+        approach to spatial<br />
+        design and systems
+      </h1>
+    </section>
+  </main>
+
+  <!-- GSAP -->
+  <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+  <script src="hero.js"></script>
+  <script>
+    function updateTime() {
+      const now = new Date();
+      const timeString = now.toLocaleString('en-US', {timeZone: 'Africa/Algiers', hour12: true, hour: 'numeric', minute: '2-digit'});
+      const dateString = now.toLocaleString('en-US', {timeZone: 'Africa/Algiers', month: 'short', day: 'numeric', year: 'numeric'});
+      document.getElementById('time-display').textContent = `Algeria\u00A0\u00A0\u00A0⧗\u00A0\u00A0\u00A0${timeString}\u00A0\u00A0\u00A0${dateString}`;
+    }
+    updateTime();
+    setInterval(updateTime, 60000);
+
+    // Entry animation
+    const entryTl = gsap.timeline();
+    entryTl.to('#loading-overlay', { top: '100%', duration: 1, ease: 'power2.inOut' })
+      .to({}, { duration: 0.8 }) // delay to show empty background
+      .fromTo('.logo', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 })
+      .fromTo('.nav a', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.2 }, '-=0.3')
+      .fromTo('.meta', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.25')
+      .call(() => {
+        // Start logo flip after buttons
+        const logoTl = gsap.timeline({ repeat: -1 });
+        logoTl.to('.logo span', { rotationY: 180, duration: 0.5, stagger: 0.1 }, 0)
+          .to('.logo span', { rotationY: 0, duration: 0.5, stagger: 0.1 }, 0.5)
+          .to({}, { duration: 4 }, 1);
+
+        // Start hero animation
+        gsap.fromTo(".letter", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, stagger: 0.08, ease: "power4.out" });
+      });
+
+    // HOVER SYSTEM - tracks cursor and shows highlight box
+    const highlight = document.getElementById('bg-highlight');
+    const gridSize = window.innerWidth <= 768 ? 50 : 80;
+    let inactivityTimer;
+
+    function updateHighlight(e) {
+      const x = e.clientX;
+      const y = e.clientY;
+      const cellX = Math.floor(x / gridSize) * gridSize;
+      const cellY = Math.floor(y / gridSize) * gridSize;
+
+      highlight.style.setProperty('--hx', `${cellX}px`);
+      highlight.style.setProperty('--hy', `${cellY}px`);
+      highlight.style.opacity = '1';
+
+      // Reset inactivity timer
+      clearTimeout(inactivityTimer);
+      inactivityTimer = setTimeout(() => {
+        highlight.style.opacity = '0';
+      }, 2000); // Fade out after 2 seconds of inactivity
+    }
+
+    window.addEventListener('mousemove', updateHighlight);
+    window.addEventListener('mouseleave', () => {
+      clearTimeout(inactivityTimer);
+      highlight.style.opacity = '0';
+    });
+
+    // FLIP SYSTEM - separate element, only activates on click
+    const flipCell = document.getElementById('flip-cell');
+    let isFlipping = false;
+    let lastTouchX = 0;
+    let lastTouchY = 0;
+
+    // Track touch position
+    document.addEventListener('touchstart', (e) => {
+      const touch = e.touches[0];
+      lastTouchX = touch.clientX;
+      lastTouchY = touch.clientY;
+    });
+
+    function flipCell_onClick(e) {
+      if (isFlipping) return;
+      
+      let x, y;
+      
+      // Handle touch events
+      if (e.type === 'touchend') {
+        x = lastTouchX;
+        y = lastTouchY;
+      } else {
+        x = e.clientX;
+        y = e.clientY;
+      }
+      
+      const cellX = Math.floor(x / gridSize) * gridSize;
+      const cellY = Math.floor(y / gridSize) * gridSize;
+      
+      isFlipping = true;
+
+      // Position flip cell at clicked location
+      flipCell.style.setProperty('--fx', `${cellX}px`);
+      flipCell.style.setProperty('--fy', `${cellY}px`);
+      
+      const tl = gsap.timeline();
+      tl.to(flipCell, {
+        rotationY: 180,
+        duration: 0.35,
+        ease: 'power2.in',
+        backgroundColor: 'rgba(17, 17, 17, 0.9)',
+        borderColor: 'rgba(0, 0, 0, 0.9)',
+        boxShadow: '0 0 14px rgba(0,0,0,0.4)'
+      })
+        .to(flipCell, {
+          rotationY: 0,
+          duration: 0.35,
+          ease: 'power2.out',
+          backgroundColor: 'rgba(0, 0, 0, 0)',
+          borderColor: 'rgba(0, 0, 0, 0.06)',
+          boxShadow: '0 0 14px rgba(0,0,0,0.16)',
+          onComplete: () => {
+            isFlipping = false;
+            // Move flip cell off-screen
+            flipCell.style.setProperty('--fx', '-200px');
+            flipCell.style.setProperty('--fy', '-200px');
+          }
+        });
+    }
+
+    window.addEventListener('click', flipCell_onClick);
+    document.addEventListener('touchend', flipCell_onClick);
+  </script>
+</body>
+</html>
