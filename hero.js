@@ -1,4 +1,4 @@
-﻿// ===== HERO MOTION EDITOR (FRAMES + COLLISIONS + TIMELINE BAR) =====
+﻿// ===== HERO MOTION EDITOR WITH GROUND PLANE =====
 
 // load GSAP Draggable
 const draggableScript = document.createElement("script");
@@ -8,10 +8,13 @@ document.head.appendChild(draggableScript);
 draggableScript.onload = () => init();
 
 function init() {
-  const LETTER_SCALE = 0.4;
+  const LETTER_SCALE = 0.75;
   const START_Y = -500;
   const PADDING = 8;
   const FRAME_DURATION = 0.8;
+
+  // 🔒 GROUND POSITION (tweak this)
+  const GROUND_Y = window.innerHeight * 0.68;
 
   const letters = [
     document.querySelector(".o"),
@@ -23,10 +26,25 @@ function init() {
   ];
 
   let frames = [];
-  window.framesData = frames; // 🔒 exportable
+  window.framesData = frames;
 
   document.addEventListener("contextmenu", e => e.preventDefault());
 
+  // ---------- GROUND LINE ----------
+  const ground = document.createElement("div");
+  ground.style.cssText = `
+    position:fixed;
+    left:0;
+    right:0;
+    top:${GROUND_Y}px;
+    height:1px;
+    background:rgba(0,0,0,0.2);
+    z-index:9998;
+    pointer-events:none;
+  `;
+  document.body.appendChild(ground);
+
+  // ---------- INITIAL SETUP ----------
   gsap.set(letters, {
     scale: LETTER_SCALE,
     y: START_Y,
@@ -37,7 +55,7 @@ function init() {
     transformOrigin: "50% 100%"
   });
 
-  // ---------------- UI BAR ----------------
+  // ---------- UI BAR ----------
   const bar = document.createElement("div");
   bar.style.cssText = `
     position:fixed;
@@ -99,7 +117,7 @@ function init() {
     bar.appendChild(play);
   }
 
-  // ---------------- COLLISIONS ----------------
+  // ---------- COLLISIONS ----------
   function rectsOverlap(r1, r2) {
     return !(
       r1.right < r2.left + PADDING ||
@@ -111,22 +129,36 @@ function init() {
 
   function resolveCollisions(active) {
     const a = active.getBoundingClientRect();
+
+    // 🔒 FLOOR CONSTRAINT
+    if (a.bottom > GROUND_Y) {
+      gsap.set(active, {
+        y: `-=${a.bottom - GROUND_Y}`
+      });
+    }
+
     letters.forEach(other => {
       if (other === active) return;
       const b = other.getBoundingClientRect();
+
       if (rectsOverlap(a, b)) {
         const dx = (a.left + a.width / 2) - (b.left + b.width / 2);
         const dy = (a.top + a.height / 2) - (b.top + b.height / 2);
+
         if (Math.abs(dx) > Math.abs(dy)) {
-          gsap.set(active, { x: `+=${dx > 0 ? PADDING : -PADDING}` });
+          gsap.set(active, {
+            x: `+=${dx > 0 ? PADDING : -PADDING}`
+          });
         } else {
-          gsap.set(active, { y: `+=${dy > 0 ? PADDING : -PADDING}` });
+          gsap.set(active, {
+            y: `+=${dy > 0 ? PADDING : -PADDING}`
+          });
         }
       }
     });
   }
 
-  // ---------------- DRAG + ROTATE ----------------
+  // ---------- DRAG + ROTATE ----------
   letters.forEach(letter => {
     let rotating = false;
     let startX = 0;
@@ -165,7 +197,7 @@ function init() {
     });
   });
 
-  // ---------------- FRAMES ----------------
+  // ---------- FRAMES ----------
   function saveFrame() {
     const frame = letters.map(l => ({
       x: Math.round(gsap.getProperty(l, "x")),
@@ -210,7 +242,7 @@ function init() {
     });
   }
 
-  // ---------------- KEYS ----------------
+  // ---------- KEYS ----------
   window.addEventListener("keydown", e => {
     if (e.key.toLowerCase() === "t") saveFrame();
     if (e.key.toLowerCase() === "p") playTimeline();
@@ -219,7 +251,7 @@ function init() {
   renderBar();
 
   console.log(
-    "%cDRAG letters | RIGHT drag = rotate | T = save frame | P = play",
+    "%cGROUND ACTIVE | DRAG = MOVE | RIGHT DRAG = ROTATE | T = SAVE | P = PLAY",
     "font-weight:bold;"
   );
 }
