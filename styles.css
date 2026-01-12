@@ -54,17 +54,23 @@ body {
   --gsize: 80px;
   --hx: -200px;
   --hy: -200px;
-  --hcolor: rgba(0, 0, 0, 0.12);
-  background:
-    linear-gradient(var(--hcolor), var(--hcolor)) var(--hx) var(--hy) / var(--gsize) 1px no-repeat,
-    linear-gradient(var(--hcolor), var(--hcolor)) var(--hx) calc(var(--hy) + var(--gsize) - 1px) / var(--gsize) 1px no-repeat,
-    linear-gradient(var(--hcolor), var(--hcolor)) var(--hx) var(--hy) / 1px var(--gsize) no-repeat,
-    linear-gradient(var(--hcolor), var(--hcolor)) calc(var(--hx) + var(--gsize) - 1px) var(--hy) / 1px var(--gsize) no-repeat;
-  mix-blend-mode: multiply;
   opacity: 0;
   transition: opacity 0.2s ease;
+}
+
+#bg-highlight-cell {
+  position: absolute;
+  left: var(--hx);
+  top: var(--hy);
+  width: var(--gsize);
+  height: var(--gsize);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: rgba(0, 0, 0, 0.06);
+  box-shadow: 0 0 14px rgba(0, 0, 0, 0.16);
   transform: rotateY(0deg);
+  transform-origin: center center;
   transform-style: preserve-3d;
+  will-change: transform, background, border-color, box-shadow;
 }
 
 #loading-overlay {
