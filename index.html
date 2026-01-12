@@ -17,7 +17,7 @@
     <div id="loading-overlay"></div>
 
     <!-- Version Indicator -->
-    <div id="version-indicator">v0.0.85</div>
+    <div id="version-indicator">v0.0.86</div>
 
   <!-- HEADER -->
   <header class="site-header">
@@ -81,6 +81,8 @@
     const highlight = document.getElementById('bg-highlight');
     const gridSize = window.innerWidth <= 768 ? 50 : 80;
     let inactivityTimer;
+    let flippingCellX = null;
+    let flippingCellY = null;
 
     function updateHighlight(e) {
       const x = e.clientX;
@@ -90,7 +92,13 @@
 
       highlight.style.setProperty('--hx', `${cellX}px`);
       highlight.style.setProperty('--hy', `${cellY}px`);
-      highlight.style.opacity = '1';
+      
+      // Hide hover if on the flipping cell
+      if (cellX === flippingCellX && cellY === flippingCellY) {
+        highlight.style.opacity = '0';
+      } else {
+        highlight.style.opacity = '1';
+      }
 
       // Reset inactivity timer
       clearTimeout(inactivityTimer);
@@ -136,6 +144,14 @@
       const cellY = Math.floor(y / gridSize) * gridSize;
       
       isFlipping = true;
+      flippingCellX = cellX;
+      flippingCellY = cellY;
+      
+      // Hide hover if on flipping cell
+      if (highlight.style.getPropertyValue('--hx') === `${cellX}px` && 
+          highlight.style.getPropertyValue('--hy') === `${cellY}px`) {
+        highlight.style.opacity = '0';
+      }
 
       // Position flip cell at clicked location
       flipCell.style.setProperty('--fx', `${cellX}px`);
@@ -159,6 +175,8 @@
           boxShadow: '0 0 14px rgba(0,0,0,0.16)',
           onComplete: () => {
             isFlipping = false;
+            flippingCellX = null;
+            flippingCellY = null;
             // Move flip cell off-screen
             flipCell.style.setProperty('--fx', '-200px');
             flipCell.style.setProperty('--fy', '-200px');
