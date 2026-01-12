@@ -36,7 +36,6 @@
     <div id="animation-box"></div>
 
     <section class="hero-text">
-      <span class="label">(I AM)</span>
       <h1>
         The architecture-first<br />
         approach to spatial<br />
@@ -107,10 +106,13 @@
         logoTl.to('.logo span', { rotationY: 180, duration: 0.5, stagger: 0.1 }, 0)
           .to('.logo span', { rotationY: 0, duration: 0.5, stagger: 0.1 }, 0.5)
           .to({}, { duration: 4 }, 1);
-
-        // Start hero animation
+      })
+      .to('#animation-box', { opacity: 1, duration: 0.5 }, '+=0.2')
+      .call(() => {
+        // Start hero word animation
         gsap.fromTo(".letter", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, stagger: 0.08, ease: "power4.out" });
-      });
+      })
+      .to('.hero-text', { opacity: 1, duration: 0.5 }, '+=0.5');
 
     // GRID HIGHLIGHT SYSTEM - single element for hover and flip
     const highlight = document.getElementById('bg-highlight');
