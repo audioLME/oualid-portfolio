@@ -5,7 +5,7 @@
   "3D ARTIST"
 ];
 
-const container = document.getElementById("hero-letters");
+const container = document.getElementById("animation-box");
 let wordIndex = 0;
 
 function showWord(word) {

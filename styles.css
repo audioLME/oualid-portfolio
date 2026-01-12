@@ -97,13 +97,21 @@ body {
   perspective: 1200px;
 }
 
+#animation-box {
+  position: relative;
+  width: 80%;
+  max-width: 800px;
+  height: 200px;
+  overflow: hidden;
+}
+
 .letter {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   font-family: "Konnect", sans-serif;
   font-weight: 900;
-  font-size: clamp(4rem, 8vw, 10rem);
+  font-size: clamp(3.4rem, 6.8vw, 8.5rem);
   line-height: 1;
   color: #111;
   user-select: none;
@@ -146,6 +154,6 @@ body {
   }
 
   .letter {
-    font-size: clamp(3rem, 15vw, 6rem);
+    font-size: clamp(2.55rem, 12.75vw, 5.1rem);
   }
 }
