@@ -18,7 +18,7 @@
       <a href="#">CONTACT</a>
     </nav>
 
-    <div class="meta" id="time-display">Algeria ⏳ 00:00 AM</div>
+    <div class="meta" id="time-display">𝍄 Jan 1 Algeria ⧗ 00:00 AM</div>
   </header>
 
   <!-- HERO -->
@@ -42,7 +42,8 @@
     function updateTime() {
       const now = new Date();
       const timeString = now.toLocaleString('en-US', {timeZone: 'Africa/Algiers', hour12: true, hour: 'numeric', minute: '2-digit'});
-      document.getElementById('time-display').textContent = `Algeria ⧗ ${timeString}`;
+      const dateString = now.toLocaleString('en-US', {timeZone: 'Africa/Algiers', month: 'short', day: 'numeric'});
+      document.getElementById('time-display').textContent = `𝍄 ${dateString} Algeria ⧗ ${timeString}`;
     }
     updateTime();
     setInterval(updateTime, 60000);
