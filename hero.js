@@ -35,8 +35,9 @@ function showWord(word) {
 
   gsap.fromTo(
     ".letter",
-    { opacity: 0 },
+    { y: 300, opacity: 0 },
     {
+      y: 0,
       opacity: 1,
       duration: 0.9,
       stagger: 0.08,
@@ -47,7 +48,7 @@ function showWord(word) {
 
 function hideWord(next) {
   gsap.to(".letter", {
-
+    y: -300,
     opacity: 0,
     duration: 0.7,
     stagger: 0.06,

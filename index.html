@@ -51,43 +51,21 @@
     setInterval(updateTime, 60000);
 
     // Entry animation
-    gsap.to('#loading-overlay', { top: '100%', duration: 1, ease: 'power2.inOut', onComplete: () => {
-      gsap.delayedCall(0.8, () => {
-        gsap.fromTo('.logo', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 });
-        gsap.fromTo('.nav a', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.2 });
-        gsap.fromTo('.meta', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 });
-        gsap.delayedCall(1.5, () => {
-          // Logo flip
-          const logoTl = gsap.timeline({ repeat: -1 });
-          logoTl.to('.logo span', { rotationY: 180, duration: 0.5, stagger: 0.1 }, 0)
-            .to('.logo span', { rotationY: 0, duration: 0.5, stagger: 0.1 }, 0.5)
-            .to({}, { duration: 4 }, 1);
-          // Hero first word
-          const word = words[0];
-          container.innerHTML = "";
-          const letters = word.split("");
-          letters.forEach((char, i) => {
-            const el = document.createElement("div");
-            el.className = "letter";
-            el.textContent = char === " " ? "\u00A0" : char;
-            container.appendChild(el);
-          });
-          const containerWidth = container.getBoundingClientRect().width;
-          const els = container.querySelectorAll('.letter');
-          const widths = Array.from(els).map(el => el.getBoundingClientRect().width);
-          const sumWidths = widths.reduce((a, b) => a + b, 0);
-          const gap = Math.min(10, Math.max(0, (containerWidth - sumWidths) / (widths.length - 1)));
-          let currentLeft = Math.max(0, (containerWidth - (sumWidths + (widths.length - 1) * gap)) / 2);
-          els.forEach((el, i) => {
-            el.style.left = `${currentLeft}px`;
-            currentLeft += widths[i] + gap;
-          });
-          gsap.to(".letter", { opacity: 1, duration: 0.5 });
-          wordIndex = 1;
-          gsap.delayedCall(4, () => { cycle(); });
-        });
+    const entryTl = gsap.timeline();
+    entryTl.to('#loading-overlay', { top: '100%', duration: 1, ease: 'power2.inOut' })
+      .to({}, { duration: 0.8 }) // delay to show empty background
+      .fromTo('.logo', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 })
+      .fromTo('.nav a', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.2 }, '-=0.3')
+      .call(() => {
+        // Start logo flip after buttons
+        const logoTl = gsap.timeline({ repeat: -1 });
+        logoTl.to('.logo span', { rotationY: 180, duration: 0.5, stagger: 0.1 }, 0)
+          .to('.logo span', { rotationY: 0, duration: 0.5, stagger: 0.1 }, 0.5)
+          .to({}, { duration: 4 }, 1);
+
+        // Start hero animation
+        gsap.fromTo(".letter", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, stagger: 0.08, ease: "power4.out" });
       });
-    }});
   </script>
 </body>
 </html>
