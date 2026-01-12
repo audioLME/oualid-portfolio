@@ -122,6 +122,7 @@ body {
   font-size: clamp(3.4rem, 6.8vw, 8.5rem);
   line-height: 1;
   color: #111;
+  opacity: 0;
   user-select: none;
 }
 
@@ -185,5 +186,6 @@ body {
 
   .letter {
     font-size: clamp(2.55rem, 12.75vw, 5.1rem);
+    opacity: 0;
   }
 }
