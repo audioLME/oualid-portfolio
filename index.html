@@ -115,12 +115,16 @@
       .to('#subtitle-box', { opacity: 1, duration: 0.3 }, '-=0.3')
       .call(() => {
         // Type in MEGHLAOUI after OUALID appears
-        showSubtitle();
+        if (typeof showSubtitle === 'function') {
+          showSubtitle();
+        }
       })
       .to('.hero-text', { opacity: 1, duration: 0.5 }, '+=0.5')
       .call(() => {
         // Start cycling after OUALID has been shown for 2.5s
-        gsap.delayedCall(2.5, startCycle);
+        if (typeof startCycle === 'function') {
+          gsap.delayedCall(2.5, startCycle);
+        }
       });
 
     // GRID HIGHLIGHT SYSTEM - single element for hover and flip
