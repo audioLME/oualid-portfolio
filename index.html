@@ -101,13 +101,17 @@
 
     // GRID HIGHLIGHT SYSTEM - single element for hover and flip
     const highlight = document.getElementById('bg-highlight');
-    const gridSize = window.innerWidth <= 768 ? 50 : 80;
     let inactivityTimer;
     let isFlipping = false;
     let lastTouchX = 0;
     let lastTouchY = 0;
 
+    function getGridSize() {
+      return window.innerWidth <= 768 ? 50 : 80;
+    }
+
     function updateHighlight(e) {
+      const gridSize = getGridSize();
       const x = e.clientX;
       const y = e.clientY;
       const cellX = Math.floor(x / gridSize) * gridSize;
@@ -144,6 +148,7 @@
     function flipCell_onClick(e) {
       if (isFlipping) return;
       
+      const gridSize = getGridSize();
       let x, y;
       if (e.type === 'touchend') {
         x = lastTouchX;
