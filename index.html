@@ -17,7 +17,7 @@
     <div id="loading-overlay"></div>
 
     <!-- Version Indicator -->
-    <div id="version-indicator">v0.0.81</div>
+    <div id="version-indicator">v0.0.82</div>
 
   <!-- HEADER -->
   <header class="site-header">
@@ -80,6 +80,7 @@
     // HOVER SYSTEM - tracks cursor and shows highlight box
     const highlight = document.getElementById('bg-highlight');
     const gridSize = window.innerWidth <= 768 ? 50 : 80;
+    let inactivityTimer;
 
     function updateHighlight(e) {
       const x = e.clientX;
@@ -90,22 +91,47 @@
       highlight.style.setProperty('--hx', `${cellX}px`);
       highlight.style.setProperty('--hy', `${cellY}px`);
       highlight.style.opacity = '1';
+
+      // Reset inactivity timer
+      clearTimeout(inactivityTimer);
+      inactivityTimer = setTimeout(() => {
+        highlight.style.opacity = '0';
+      }, 2000); // Fade out after 2 seconds of inactivity
     }
 
     window.addEventListener('mousemove', updateHighlight);
     window.addEventListener('mouseleave', () => {
+      clearTimeout(inactivityTimer);
       highlight.style.opacity = '0';
     });
 
     // FLIP SYSTEM - separate element, only activates on click
     const flipCell = document.getElementById('flip-cell');
     let isFlipping = false;
+    let lastTouchX = 0;
+    let lastTouchY = 0;
+
+    // Track touch position
+    document.addEventListener('touchstart', (e) => {
+      const touch = e.touches[0];
+      lastTouchX = touch.clientX;
+      lastTouchY = touch.clientY;
+    });
 
     function flipCell_onClick(e) {
       if (isFlipping) return;
       
-      const x = e.clientX;
-      const y = e.clientY;
+      let x, y;
+      
+      // Handle touch events
+      if (e.type === 'touchend') {
+        x = lastTouchX;
+        y = lastTouchY;
+      } else {
+        x = e.clientX;
+        y = e.clientY;
+      }
+      
       const cellX = Math.floor(x / gridSize) * gridSize;
       const cellY = Math.floor(y / gridSize) * gridSize;
       
