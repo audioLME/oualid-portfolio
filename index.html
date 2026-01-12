@@ -10,7 +10,8 @@
 
     <!-- Background Lines -->
     <div id="bg-lines"></div>
-    <div id="bg-highlight"><div id="bg-highlight-cell"></div></div>
+    <div id="bg-highlight"></div>
+    <div id="flip-cell"></div>
 
     <!-- Loading Overlay -->
     <div id="loading-overlay"></div>
@@ -72,9 +73,8 @@
         gsap.fromTo(".letter", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, stagger: 0.08, ease: "power4.out" });
       });
 
-    // Interactive grid highlight
+    // HOVER SYSTEM - tracks cursor and shows highlight box
     const highlight = document.getElementById('bg-highlight');
-    const highlightCell = document.getElementById('bg-highlight-cell');
     const gridSize = 80;
 
     function updateHighlight(e) {
@@ -93,10 +93,11 @@
       highlight.style.opacity = '0';
     });
 
-    // Click flip for highlighted cell
+    // FLIP SYSTEM - separate element, only activates on click
+    const flipCell = document.getElementById('flip-cell');
     let isFlipping = false;
 
-    function flipHighlight(e) {
+    function flipCell_onClick(e) {
       if (isFlipping) return;
       
       const x = e.clientX;
@@ -107,11 +108,11 @@
       isFlipping = true;
 
       // Position flip cell at clicked location
-      highlightCell.style.setProperty('--fx', `${cellX}px`);
-      highlightCell.style.setProperty('--fy', `${cellY}px`);
+      flipCell.style.setProperty('--fx', `${cellX}px`);
+      flipCell.style.setProperty('--fy', `${cellY}px`);
       
       const tl = gsap.timeline();
-      tl.to(highlightCell, {
+      tl.to(flipCell, {
         rotationY: 180,
         duration: 0.35,
         ease: 'power2.in',
@@ -119,7 +120,7 @@
         borderColor: 'rgba(0, 0, 0, 0.9)',
         boxShadow: '0 0 14px rgba(0,0,0,0.4)'
       })
-        .to(highlightCell, {
+        .to(flipCell, {
           rotationY: 0,
           duration: 0.35,
           ease: 'power2.out',
@@ -129,14 +130,14 @@
           onComplete: () => {
             isFlipping = false;
             // Move flip cell off-screen
-            highlightCell.style.setProperty('--fx', '-200px');
-            highlightCell.style.setProperty('--fy', '-200px');
+            flipCell.style.setProperty('--fx', '-200px');
+            flipCell.style.setProperty('--fy', '-200px');
           }
         });
     }
 
-    window.addEventListener('click', flipHighlight);
-    document.addEventListener('touchend', flipHighlight);
+    window.addEventListener('click', flipCell_onClick);
+    document.addEventListener('touchend', flipCell_onClick);
   </script>
 </body>
 </html>

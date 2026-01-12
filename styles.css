@@ -48,22 +48,25 @@ body {
 
 #bg-highlight {
   position: fixed;
-  inset: 0;
+  left: var(--hx, -200px);
+  top: var(--hy, -200px);
+  width: 80px;
+  height: 80px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: rgba(0, 0, 0, 0);
+  box-shadow: 0 0 14px rgba(0, 0, 0, 0.16);
   pointer-events: none;
   z-index: 0;
-  --gsize: 80px;
-  --hx: -200px;
-  --hy: -200px;
   opacity: 0;
   transition: opacity 0.2s ease;
 }
 
-#bg-highlight-cell {
+#flip-cell {
   position: fixed;
   left: var(--fx, -200px);
   top: var(--fy, -200px);
-  width: var(--gsize);
-  height: var(--gsize);
+  width: 80px;
+  height: 80px;
   border: 1px solid rgba(0, 0, 0, 0.06);
   background: rgba(0, 0, 0, 0);
   box-shadow: 0 0 14px rgba(0, 0, 0, 0.16);
