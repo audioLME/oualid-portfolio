@@ -88,6 +88,23 @@ body {
   z-index: 9999;
 }
 
+#version-indicator {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  padding: 8px 12px;
+  background: rgba(17, 17, 17, 0.85);
+  color: #eee9e4;
+  font-family: "Konnect", sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  border-radius: 4px;
+  z-index: 100;
+  pointer-events: none;
+  backdrop-filter: blur(8px);
+}
+
 /* HEADER */
 .site-header {
   position: fixed;
