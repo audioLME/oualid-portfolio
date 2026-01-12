@@ -6,12 +6,11 @@
 ];
 
 const container = document.getElementById("hero-letters");
-
 let wordIndex = 0;
 
-// spacing logic
+// horizontal spacing
 function getLeft(index) {
-  return `${index * 12}%`;
+  return `${index * 11}%`;
 }
 
 function showWord(word) {
@@ -20,34 +19,34 @@ function showWord(word) {
   const letters = word.split("");
 
   letters.forEach((char, i) => {
-    const div = document.createElement("div");
-    div.className = "letter";
-    div.textContent = char === " " ? "\u00A0" : char;
-    div.style.left = getLeft(i);
-    container.appendChild(div);
+    const el = document.createElement("div");
+    el.className = "letter";
+    el.textContent = char === " " ? "\u00A0" : char;
+    el.style.left = getLeft(i);
+    container.appendChild(el);
   });
 
   gsap.fromTo(
     ".letter",
-    { y: 300, opacity: 0 },
+    { y: 160, opacity: 0 },
     {
       y: 0,
       opacity: 1,
-      duration: 0.8,
+      duration: 0.9,
       stagger: 0.08,
       ease: "power4.out"
     }
   );
 }
 
-function hideWord(callback) {
+function hideWord(next) {
   gsap.to(".letter", {
-    y: -300,
+    y: -160,
     opacity: 0,
-    duration: 0.6,
+    duration: 0.7,
     stagger: 0.06,
     ease: "power4.in",
-    onComplete: callback
+    onComplete: next
   });
 }
 
