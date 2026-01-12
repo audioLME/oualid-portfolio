@@ -18,7 +18,7 @@
       <a href="#">CONTACT</a>
     </nav>
 
-    <div class="meta">LA • 3:06 PM</div>
+    <div class="meta" id="time-display">Algeria ⏳ 00:00 AM</div>
   </header>
 
   <!-- HERO -->
@@ -38,5 +38,14 @@
   <!-- GSAP -->
   <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
   <script src="hero.js"></script>
+  <script>
+    function updateTime() {
+      const now = new Date();
+      const timeString = now.toLocaleString('en-US', {timeZone: 'Africa/Algiers', hour12: true, hour: 'numeric', minute: '2-digit'});
+      document.getElementById('time-display').textContent = `Algeria ⏳ ${timeString}`;
+    }
+    updateTime();
+    setInterval(updateTime, 60000);
+  </script>
 </body>
 </html>
