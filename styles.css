@@ -55,7 +55,7 @@ body {
 }
 
 .logo {
-  font-weight: 1000;
+  font-weight: 900;
   font-size: 25px;
   letter-spacing: 0.05em;
 }
@@ -69,12 +69,12 @@ body {
   text-decoration: none;
   color: #111;
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .meta {
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 /* HERO */
@@ -138,17 +138,17 @@ body {
 
   .logo {
     font-size: 22px;
-    font-weight: 1000;
+    font-weight: 900;
   }
 
   .nav a {
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 500;
   }
 
   .meta {
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 500;
   }
 
   .nav {
