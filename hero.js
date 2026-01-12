@@ -8,7 +8,7 @@ document.head.appendChild(draggableScript);
 draggableScript.onload = () => init();
 
 function init() {
-  const LETTER_SCALE = 0.75;
+  const LETTER_SCALE = 0.4;
   const START_Y = -500;
   const PADDING = 8;
   const FRAME_DURATION = 0.8;
