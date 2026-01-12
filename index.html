@@ -76,8 +76,6 @@
     const highlight = document.getElementById('bg-highlight');
     const highlightCell = document.getElementById('bg-highlight-cell');
     const gridSize = 80;
-    let currentCellX = -1;
-    let currentCellY = -1;
 
     function updateHighlight(e) {
       const x = e.clientX;
@@ -100,25 +98,8 @@
 
     function flipHighlight(e) {
       if (isFlipping) return;
-      
-      let x, y;
-      if (e.touches) {
-        x = e.touches[0].clientX;
-        y = e.touches[0].clientY;
-      } else {
-        x = e.clientX;
-        y = e.clientY;
-      }
-      
-      const cellX = Math.floor(x / gridSize) * gridSize;
-      const cellY = Math.floor(y / gridSize) * gridSize;
-      
       isFlipping = true;
-
-      // Set highlight to clicked position
-      highlightCell.style.setProperty('--hx', `${cellX}px`);
-      highlightCell.style.setProperty('--hy', `${cellY}px`);
-
+      
       const tl = gsap.timeline();
       tl.to(highlightCell, {
         rotationY: 180,
