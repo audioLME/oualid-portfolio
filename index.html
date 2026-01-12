@@ -18,7 +18,7 @@
       <a href="#">CONTACT</a>
     </nav>
 
-    <div class="meta" id="time-display">Algeria   ⧗   00:00 AM   Jan 1, 2026</div>
+    <div class="meta" id="time-display">Algeria&nbsp;&nbsp;&nbsp;⧗&nbsp;&nbsp;&nbsp;00:00 AM&nbsp;&nbsp;&nbsp;Jan 1, 2026</div>
   </header>
 
   <!-- HERO -->
@@ -43,7 +43,7 @@
       const now = new Date();
       const timeString = now.toLocaleString('en-US', {timeZone: 'Africa/Algiers', hour12: true, hour: 'numeric', minute: '2-digit'});
       const dateString = now.toLocaleString('en-US', {timeZone: 'Africa/Algiers', month: 'short', day: 'numeric', year: 'numeric'});
-      document.getElementById('time-display').textContent = `Algeria   ⧗   ${timeString}   ${dateString}`;
+      document.getElementById('time-display').textContent = `Algeria\u00A0\u00A0\u00A0⧗\u00A0\u00A0\u00A0${timeString}\u00A0\u00A0\u00A0${dateString}`;
     }
     updateTime();
     setInterval(updateTime, 60000);
