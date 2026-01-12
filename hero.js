@@ -20,9 +20,9 @@ function showWord(word) {
     container.appendChild(el);
   });
 
-  const containerWidth = container.offsetWidth;
+  const containerWidth = container.getBoundingClientRect().width;
   const els = container.querySelectorAll('.letter');
-  const widths = Array.from(els).map(el => el.offsetWidth);
+  const widths = Array.from(els).map(el => el.getBoundingClientRect().width);
   const sumWidths = widths.reduce((a, b) => a + b, 0);
   const gap = Math.max(5, (containerWidth - sumWidths) / (widths.length - 1));
   const totalWidth = sumWidths + (widths.length - 1) * gap;
