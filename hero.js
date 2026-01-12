@@ -21,36 +21,37 @@ function showWord(word) {
   });
 
   const containerWidth = container.offsetWidth;
-  const el = container.querySelector('.letter');
-  const fontSize = parseFloat(getComputedStyle(el).fontSize);
-  const averageWidth = 0.6 * fontSize;
-  const spacing = containerWidth / (letters.length + 1);
-  const startCenter = containerWidth / 2 - ((letters.length - 1) * spacing) / 2;
-
-  container.querySelectorAll('.letter').forEach((el, i) => {
-    el.style.left = `${startCenter - averageWidth / 2 + i * spacing}px`;
+  const els = container.querySelectorAll('.letter');
+  const widths = Array.from(els).map(el => el.offsetWidth);
+  const gap = 20;
+  const totalWidth = widths.reduce((a, b) => a + b, 0) + (widths.length - 1) * gap;
+  const startLeft = Math.max(0, (containerWidth - totalWidth) / 2);
+  let currentLeft = startLeft;
+  els.forEach((el, i) => {
+    el.style.left = `${currentLeft}px`;
+    currentLeft += widths[i] + gap;
   });
 
   gsap.fromTo(
     ".letter",
+    { y: 160, opacity: 0 },
     {
-      rotationX: -90
-    },
-    {
-      rotationX: 0,
-      duration: 0.8,
+      y: 0,
+      opacity: 1,
+      duration: 0.9,
       stagger: 0.08,
-      ease: "power3.out"
+      ease: "power4.out"
     }
   );
 }
 
 function hideWord(next) {
   gsap.to(".letter", {
-    rotationX: 90,
-    duration: 0.6,
+    y: -160,
+    opacity: 0,
+    duration: 0.7,
     stagger: 0.06,
-    ease: "power3.in",
+    ease: "power4.in",
     onComplete: next
   });
 }
