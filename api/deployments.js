@@ -1,8 +1,12 @@
 export default async function handler(req, res) {
   try {
-    const token = process.env.VERCEL_TOKEN;
+    const token = process.env.PORTFOLIO_TOKEN;
     const userId = 'pKyUvmoxBGJbvsBK1Vmc57uR';
     const projectId = 'prj_LgmzCBN6ozGtBH5oB3npJtctybES';
+
+    if (!token) {
+      return res.status(500).json({ version: 'no token', error: 'PORTFOLIO_TOKEN not set' });
+    }
 
     const response = await fetch(
       `https://api.vercel.com/v6/deployments?teamId=${userId}&projectId=${projectId}&state=READY&limit=1`,
@@ -14,6 +18,8 @@ export default async function handler(req, res) {
     );
 
     const data = await response.json();
+    console.log('API Response:', data);
+    
     const lastDeployment = data.deployments?.[0];
     
     if (lastDeployment) {
@@ -33,10 +39,10 @@ export default async function handler(req, res) {
       
       res.status(200).json({ version: timeAgo });
     } else {
-      res.status(200).json({ version: 'never' });
+      res.status(200).json({ version: 'never', debug: data });
     }
   } catch (error) {
     console.error('Deployment fetch error:', error);
-    res.status(500).json({ version: 'unknown' });
+    res.status(500).json({ version: 'error', error: error.message });
   }
 }
