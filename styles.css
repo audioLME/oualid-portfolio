@@ -54,10 +54,8 @@ body {
   font-weight: 700;
 }
 
-.logo {
-  font-weight: 900;
-  font-size: 25px;
-  letter-spacing: 0.05em;
+.logo span {
+  display: inline-block;
 }
 
 .nav {
