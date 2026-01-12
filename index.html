@@ -10,6 +10,7 @@
 
     <!-- Background Lines Grid -->
     <div id="bg-lines"></div>
+    <svg id="shape-overlay" style="position: fixed; inset: 0; pointer-events: none; z-index: 0;"></svg>
     <div id="bg-highlight"></div>
 
     <!-- Loading Overlay -->
@@ -39,17 +40,14 @@
     </div>
 
     <section class="hero-text">
-      <h1>
-        The architecture-first<br />
-        approach to spatial<br />
-        design and systems
-      </h1>
+      <h1 id="hero-heading"></h1>
     </section>
   </main>
 
   <!-- GSAP -->
   <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
   <script src="hero.js"></script>
+  <script src="shapes.js"></script>
   <script>
     // Fetch version from Vercel deployments, fallback to GitHub
     async function updateVersion() {
@@ -119,7 +117,13 @@
           showSubtitle();
         }
       })
-      .to('.hero-text', { opacity: 1, duration: 0.5 }, '+=0.5')
+      .to('.hero-text', { opacity: 1, duration: 0 }, '+=0.5')
+      .call(() => {
+        // Animate hero text letter by letter
+        if (typeof animateHeroText === 'function') {
+          animateHeroText();
+        }
+      }, null, '+=0.5')
       .call(() => {
         // Start cycling after OUALID has been shown for 2.5s
         if (typeof startCycle === 'function') {
