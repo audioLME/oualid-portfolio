@@ -17,7 +17,7 @@
     <div id="loading-overlay"></div>
 
     <!-- Version Indicator -->
-    <div id="version-indicator">v0.0.87</div>
+    <div id="version-indicator">v0.0.88</div>
 
   <!-- HEADER -->
   <header class="site-header">
@@ -81,8 +81,7 @@
     const highlight = document.getElementById('bg-highlight');
     const gridSize = window.innerWidth <= 768 ? 50 : 80;
     let inactivityTimer;
-    let flippingCellX = null;
-    let flippingCellY = null;
+    let isFlipping = false;
 
     function updateHighlight(e) {
       const x = e.clientX;
@@ -93,10 +92,7 @@
       highlight.style.setProperty('--hx', `${cellX}px`);
       highlight.style.setProperty('--hy', `${cellY}px`);
       
-      // Hide hover if on the flipping cell
-      if (cellX === flippingCellX && cellY === flippingCellY) {
-        highlight.style.opacity = '0';
-      } else {
+      if (!isFlipping) {
         highlight.style.opacity = '1';
       }
 
@@ -115,7 +111,6 @@
 
     // FLIP SYSTEM - separate element, only activates on click
     const flipCell = document.getElementById('flip-cell');
-    let isFlipping = false;
     let lastTouchX = 0;
     let lastTouchY = 0;
 
@@ -144,14 +139,7 @@
       const cellY = Math.floor(y / gridSize) * gridSize;
       
       isFlipping = true;
-      flippingCellX = cellX;
-      flippingCellY = cellY;
-      
-      // Hide hover if on flipping cell
-      if (highlight.style.getPropertyValue('--hx') === `${cellX}px` && 
-          highlight.style.getPropertyValue('--hy') === `${cellY}px`) {
-        highlight.style.opacity = '0';
-      }
+      highlight.style.opacity = '0'; // Hide hover during flip
 
       // Position flip cell at clicked location
       flipCell.style.setProperty('--fx', `${cellX}px`);
@@ -175,8 +163,6 @@
           boxShadow: '0 0 14px rgba(0,0,0,0.16)',
           onComplete: () => {
             isFlipping = false;
-            flippingCellX = null;
-            flippingCellY = null;
             // Move flip cell off-screen
             flipCell.style.setProperty('--fx', '-200px');
             flipCell.style.setProperty('--fy', '-200px');
