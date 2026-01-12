@@ -52,10 +52,7 @@
     const tl = gsap.timeline({ repeat: -1 });
     tl.to('.logo span', { rotationY: 180, duration: 0.5, stagger: 0.1 }, 0)
       .to('.logo span', { rotationY: 0, duration: 0.5, stagger: 0.1 }, 0.5)
-      .to({}, { duration: 0.4 }, 1)
-      .to('.logo span', { rotationY: 180, duration: 0.5, stagger: 0.1 }, 1.4)
-      .to('.logo span', { rotationY: 0, duration: 0.5, stagger: 0.1 }, 1.9)
-      .to({}, { duration: 4 }, 2.4);
+      .to({}, { duration: 4 }, 1);
   </script>
 </body>
 </html>
