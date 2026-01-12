@@ -33,6 +33,21 @@ body {
   font-family: "Times New Roman", serif;
 }
 
+#bg-lines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    repeating-conic-gradient(
+      from 0deg at 50% 45%,
+      rgba(0, 0, 0, 0.1) 0deg 1deg,
+      transparent 1deg 18deg
+    ),
+    radial-gradient(circle at 50% 45%, rgba(0, 0, 0, 0.06), transparent 55%);
+  mix-blend-mode: multiply;
+}
+
 #loading-overlay {
   position: fixed;
   top: 0;
@@ -103,6 +118,8 @@ body {
   align-items: center;
   justify-content: center;
   gap: 60px;
+  position: relative;
+  z-index: 1;
 }
 
 /* LEFT LETTERS */
