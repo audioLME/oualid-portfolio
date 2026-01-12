@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Oualid Meghlaoui</title>
+
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+    <!-- Navigation -->
+    <header class="nav">
+        <div class="logo">OUALID MEGHLAOUI</div>
+
+        <nav class="menu">
+            <a href="#">ABOUT</a>
+            <a href="#">ARCHITECTURE</a>
+            <a href="#">PROJECTS</a>
+            <a href="#">RESEARCH</a>
+            <a href="#">WRITINGS</a>
+            <a href="#">CONTACT</a>
+        </nav>
+
+        <div class="meta">
+            <span>LA</span>
+            <span class="dot"></span>
+            <span>3:06 PM</span>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <main class="hero">
+        <div class="hero-left">
+            <canvas id="world"></canvas>
+
+            <!-- Hidden SVG letter geometry -->
+            <svg id="letters" width="0" height="0" xmlns="http://www.w3.org/2000/svg">
+
+                <!-- O -->
+                <path id="O" fill-rule="evenodd"
+                      d="M80.687,78.938 C89.625,70.187 94.062,59.312 94.062,46.313 C94.062,33.375 89.625,22.500 80.687,13.750 C71.750,5.000 60.687,0.625 47.375,0.625 C34.063,0.625 22.938,5.000 14.000,13.750 C5.063,22.500 0.625,33.375 0.625,46.313 C0.625,59.312 5.063,70.187 14.000,78.938 C22.938,87.687 34.063,92.062 47.375,92.062 C60.687,92.062 71.750,87.687 80.687,78.938 ZM28.500,65.312 C23.437,60.250 20.937,53.937 20.937,46.313 C20.937,38.750 23.437,32.375 28.500,27.312 C33.563,22.250 39.813,19.688 47.313,19.688 C54.812,19.688 61.062,22.250 66.125,27.312 C71.188,32.375 73.687,38.750 73.687,46.313 C73.687,53.937 71.188,60.250 66.125,65.312 C61.062,70.375 54.812,72.938 47.313,72.938 C39.813,72.938 33.563,70.375 28.500,65.312 Z" />
+
+                <!-- U -->
+                <path id="U" fill-rule="evenodd"
+                      d="M63.562,79.813 C70.625,73.000 74.125,64.437 74.125,54.188 L74.125,0.188 L54.313,0.188 L54.313,53.937 C54.313,58.813 52.687,62.875 49.437,66.063 C46.188,69.312 42.125,70.937 37.250,70.937 C32.313,70.937 28.250,69.312 25.063,66.063 C21.875,62.875 20.250,58.813 20.250,53.937 L20.250,0.188 L0.438,0.188 L0.438,54.188 C0.438,64.437 3.938,73.000 11.000,79.813 C18.063,86.625 26.812,90.062 37.313,90.062 C47.750,90.062 56.500,86.625 63.562,79.813 Z" />
+
+                <!-- A -->
+                <path id="A" fill-rule="evenodd"
+                      d="M90.375,88.500 L57.125,0.188 L33.687,0.188 L0.500,88.500 L21.750,88.500 L27.250,73.000 L63.125,73.000 L68.625,88.500 L90.375,88.500 ZM45.187,22.063 L56.687,54.688 L33.687,54.688 L45.187,22.063 Z" />
+
+                <!-- L -->
+                <path id="L" fill-rule="evenodd"
+                      d="M20.813,0.188 L0.937,0.188 L0.937,88.500 L48.688,88.500 L48.688,69.812 L20.813,69.812 L20.813,0.188 Z" />
+
+                <!-- I -->
+                <path id="I" fill-rule="evenodd"
+                      d="M20.812,88.500 L20.812,0.188 L0.938,0.188 L0.938,88.500 L20.812,88.500 Z" />
+
+                <!-- D -->
+                <path id="D" fill-rule="evenodd"
+                      d="M0.938,0.188 L0.938,88.500 L35.750,88.500 C48.625,88.500 59.375,84.312 67.937,75.875 C76.500,67.500 80.812,57.000 80.812,44.313 C80.812,31.687 76.500,21.188 67.937,12.750 C59.375,4.375 48.625,0.188 35.750,0.188 L0.938,0.188 ZM20.813,69.812 L20.813,18.875 L35.250,18.875 C42.500,18.875 48.500,21.312 53.313,26.125 C58.062,31.000 60.437,37.062 60.437,44.313 C60.437,51.625 58.062,57.687 53.313,62.500 C48.500,67.375 42.500,69.812 35.250,69.812 L20.813,69.812 Z" />
+
+            </svg>
+        </div>
+
+        <div class="hero-right">
+            <small>(I AM)</small>
+            <h1>
+                An architect exploring<br />
+                space, structure, and<br />
+                contemporary form.
+            </h1>
+        </div>
+    </main>
+
+    <!-- REQUIRED POLYFILLS -->
+    <script src="https://cdn.jsdelivr.net/npm/pathseg@1.2.1/pathseg.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/poly-decomp@0.3.0/build/decomp.min.js"></script>
+
+    <!-- MATTER -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+    <script src="physics.js"></script>
+
+</body>
+</html>
