@@ -190,6 +190,29 @@ body {
   font-weight: 400;
 }
 
+/* TABLET / MEDIUM SCREENS */
+@media (max-width: 1200px) {
+  .logo {
+    font-size: 22px;
+  }
+
+  .nav a {
+    font-size: 16px;
+  }
+
+  .meta {
+    font-size: 16px;
+  }
+
+  .site-header {
+    padding: 0 32px;
+  }
+
+  .nav {
+    gap: 24px;
+  }
+}
+
 /* MOBILE */
 @media (max-width: 900px) {
   .site-header {
