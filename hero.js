@@ -8,9 +8,8 @@
 const container = document.getElementById("hero-letters");
 let wordIndex = 0;
 
-// horizontal spacing
 function getLeft(index) {
-  return `${index * 11}%`;
+  return `${index * 10}%`;
 }
 
 function showWord(word) {
@@ -28,24 +27,24 @@ function showWord(word) {
 
   gsap.fromTo(
     ".letter",
-    { y: 160, opacity: 0 },
     {
-      y: 0,
-      opacity: 1,
-      duration: 0.9,
+      rotationX: -90
+    },
+    {
+      rotationX: 0,
+      duration: 0.8,
       stagger: 0.08,
-      ease: "power4.out"
+      ease: "power3.out"
     }
   );
 }
 
 function hideWord(next) {
   gsap.to(".letter", {
-    y: -160,
-    opacity: 0,
-    duration: 0.7,
+    rotationX: 90,
+    duration: 0.6,
     stagger: 0.06,
-    ease: "power4.in",
+    ease: "power3.in",
     onComplete: next
   });
 }
@@ -61,5 +60,4 @@ function cycle() {
   });
 }
 
-// START
 cycle();
