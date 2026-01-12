@@ -13,15 +13,22 @@ function showWord(word) {
 
   const letters = word.split("");
 
-  const containerWidth = container.offsetWidth;
-  const spacing = containerWidth / letters.length;
-
   letters.forEach((char, i) => {
     const el = document.createElement("div");
     el.className = "letter";
     el.textContent = char === " " ? "\u00A0" : char;
-    el.style.left = `${i * spacing}px`;
     container.appendChild(el);
+  });
+
+  const containerWidth = container.offsetWidth;
+  const el = container.querySelector('.letter');
+  const fontSize = parseFloat(getComputedStyle(el).fontSize);
+  const averageWidth = 0.6 * fontSize;
+  const spacing = containerWidth / (letters.length + 1);
+  const startCenter = containerWidth / 2 - ((letters.length - 1) * spacing) / 2;
+
+  container.querySelectorAll('.letter').forEach((el, i) => {
+    el.style.left = `${startCenter - averageWidth / 2 + i * spacing}px`;
   });
 
   gsap.fromTo(
