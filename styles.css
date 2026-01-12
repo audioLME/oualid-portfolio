@@ -88,14 +88,6 @@ body {
 }
 
 /* LEFT LETTERS */
-#hero-letters {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  perspective: 1200px;
-}
-
 #animation-box {
   position: relative;
   width: 100%;
