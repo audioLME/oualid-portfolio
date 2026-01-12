@@ -144,6 +144,6 @@ body {
   }
 
   .letter {
-    font-size: clamp(1.5rem, 8vw, 3rem);
+    font-size: clamp(2.55rem, 12.75vw, 5.1rem);
   }
 }
