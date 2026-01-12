@@ -110,7 +110,7 @@
       .to('#animation-box', { opacity: 1, duration: 0.5 }, '+=0.2')
       .call(() => {
         // Start hero word animation
-        gsap.fromTo(".letter", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, stagger: 0.08, ease: "power4.out" });
+        startCycle();
       })
       .to('.hero-text', { opacity: 1, duration: 0.5 }, '+=0.5');
 

@@ -7,6 +7,7 @@
 
 const container = document.getElementById("animation-box");
 let wordIndex = 0;
+let isPaused = true;
 
 function positionLetters() {
   const containerWidth = container.getBoundingClientRect().width;
@@ -26,7 +27,7 @@ function positionLetters() {
   });
 }
 
-function showWord(word) {
+function showWord(word, animate = true) {
   container.innerHTML = "";
 
   const letters = word.split("");
@@ -40,17 +41,19 @@ function showWord(word) {
 
   positionLetters();
 
-  gsap.fromTo(
-    ".letter",
-    { y: 300, opacity: 0 },
-    {
-      y: 0,
-      opacity: 1,
-      duration: 0.9,
-      stagger: 0.08,
-      ease: "power4.out"
-    }
-  );
+  if (animate) {
+    gsap.fromTo(
+      ".letter",
+      { y: 300, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.9,
+        stagger: 0.08,
+        ease: "power4.out"
+      }
+    );
+  }
 }
 
 function hideWord(next) {
@@ -65,6 +68,8 @@ function hideWord(next) {
 }
 
 function cycle() {
+  if (isPaused) return;
+  
   showWord(words[wordIndex]);
 
   gsap.delayedCall(2, () => {
@@ -75,7 +80,13 @@ function cycle() {
   });
 }
 
+function startCycle() {
+  isPaused = false;
+  cycle();
+}
+
+// Initialize with first word visible
+showWord(words[0]);
+
 // Recalculate positions on window resize
 window.addEventListener('resize', positionLetters);
-
-cycle();
