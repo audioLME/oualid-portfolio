@@ -80,8 +80,6 @@
     let currentCellY = -1;
 
     function updateHighlight(e) {
-      if (isFlipping) return; // Don't update highlight while flipping
-      
       const x = e.clientX;
       const y = e.clientY;
       const cellX = Math.floor(x / gridSize) * gridSize;
@@ -119,12 +117,7 @@
     });
 
     // Click flip for highlighted cell
-    let isFlipping = false;
-
     function flipHighlight() {
-      if (isFlipping) return;
-      isFlipping = true;
-
       const tl = gsap.timeline();
       tl.to(highlightCell, {
         rotationY: 180,
@@ -142,10 +135,6 @@
           borderColor: 'rgba(0, 0, 0, 0.06)',
           boxShadow: '0 0 14px rgba(0,0,0,0.16)'
         });
-
-      gsap.delayedCall(0.7 + 0.25, () => {
-        isFlipping = false;
-      });
     }
 
     window.addEventListener('click', flipHighlight);
