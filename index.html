@@ -17,7 +17,7 @@
     <div id="loading-overlay"></div>
 
     <!-- Version Indicator -->
-    <div id="version-indicator">v0.0.83</div>
+    <div id="version-indicator">v0.0.84</div>
 
   <!-- HEADER -->
   <header class="site-header">
@@ -96,7 +96,7 @@
       clearTimeout(inactivityTimer);
       inactivityTimer = setTimeout(() => {
         highlight.style.opacity = '0';
-      }, 2000); // Fade out after 2 seconds of inactivity
+      }, 1000); // Fade out after 1 second of inactivity
     }
 
     window.addEventListener('mousemove', updateHighlight);
