@@ -282,8 +282,32 @@ body {
 
 .meta {
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 300;
   font-family: "Konnect", sans-serif;
+}
+
+.hourglass {
+  vertical-align: middle;
+  display: inline-block;
+  transform-origin: center center;
+  animation: rotateHourglass 8s ease-in-out infinite;
+  line-height: 0;
+  position: relative;
+  top: -2px;
+  width: 12px;
+  height: 15px;
+}
+
+@keyframes rotateHourglass {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(180deg);
+  }
 }
 
 /* HERO */
