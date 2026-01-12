@@ -43,9 +43,11 @@ function positionSubtitle() {
   
   const widths = Array.from(els).map(el => el.getBoundingClientRect().width);
   const sumWidths = widths.reduce((a, b) => a + b, 0);
+  
+  // Use uniform gap to prevent uneven spacing between letters
   const gap = oualidTotalWidth > 0 
-    ? (oualidTotalWidth - sumWidths) / (widths.length - 1)
-    : Math.min(8, Math.max(0, (containerWidth - sumWidths) / (widths.length - 1)));
+    ? Math.max(5, (oualidTotalWidth - sumWidths) / (widths.length - 1))
+    : Math.min(8, Math.max(5, (containerWidth - sumWidths) / (widths.length - 1)));
   
   const totalWidth = sumWidths + (widths.length - 1) * gap;
   const startLeft = Math.max(0, (containerWidth - totalWidth) / 2);
