@@ -10,6 +10,7 @@
 
     <!-- Background Lines -->
     <div id="bg-lines"></div>
+    <div id="bg-highlight"></div>
 
     <!-- Loading Overlay -->
     <div id="loading-overlay"></div>
@@ -70,6 +71,24 @@
         // Start hero animation
         gsap.fromTo(".letter", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, stagger: 0.08, ease: "power4.out" });
       });
+
+    // Interactive grid highlight
+    const highlight = document.getElementById('bg-highlight');
+    const gridSize = 80;
+    function updateHighlight(e) {
+      const x = e.clientX;
+      const y = e.clientY;
+      const cellX = Math.floor(x / gridSize) * gridSize;
+      const cellY = Math.floor(y / gridSize) * gridSize;
+      highlight.style.setProperty('--hx', `${cellX}px`);
+      highlight.style.setProperty('--hy', `${cellY}px`);
+      highlight.style.opacity = '1';
+    }
+
+    window.addEventListener('mousemove', updateHighlight);
+    window.addEventListener('mouseleave', () => {
+      highlight.style.opacity = '0';
+    });
   </script>
 </body>
 </html>
