@@ -76,20 +76,46 @@
     const highlight = document.getElementById('bg-highlight');
     const highlightCell = document.getElementById('bg-highlight-cell');
     const gridSize = 80;
+    let currentCellX = -1;
+    let currentCellY = -1;
 
     function updateHighlight(e) {
+      if (isFlipping) return; // Don't update highlight while flipping
+      
       const x = e.clientX;
       const y = e.clientY;
       const cellX = Math.floor(x / gridSize) * gridSize;
       const cellY = Math.floor(y / gridSize) * gridSize;
-      highlight.style.setProperty('--hx', `${cellX}px`);
-      highlight.style.setProperty('--hy', `${cellY}px`);
-      highlight.style.opacity = '1';
+
+      // If moved to different square, fade out then update
+      if (cellX !== currentCellX || cellY !== currentCellY) {
+        if (currentCellX !== -1 || currentCellY !== -1) {
+          highlight.style.transition = 'opacity 0.2s ease';
+          highlight.style.opacity = '0';
+          
+          setTimeout(() => {
+            highlight.style.setProperty('--hx', `${cellX}px`);
+            highlight.style.setProperty('--hy', `${cellY}px`);
+            highlight.style.opacity = '1';
+            currentCellX = cellX;
+            currentCellY = cellY;
+          }, 50);
+        } else {
+          highlight.style.setProperty('--hx', `${cellX}px`);
+          highlight.style.setProperty('--hy', `${cellY}px`);
+          highlight.style.opacity = '1';
+          currentCellX = cellX;
+          currentCellY = cellY;
+        }
+      }
     }
 
     window.addEventListener('mousemove', updateHighlight);
     window.addEventListener('mouseleave', () => {
+      highlight.style.transition = 'opacity 0.3s ease';
       highlight.style.opacity = '0';
+      currentCellX = -1;
+      currentCellY = -1;
     });
 
     // Click flip for highlighted cell
@@ -117,7 +143,7 @@
           boxShadow: '0 0 14px rgba(0,0,0,0.16)'
         });
 
-      gsap.delayedCall(0.7 + 0.5, () => {
+      gsap.delayedCall(0.7 + 0.25, () => {
         isFlipping = false;
       });
     }
