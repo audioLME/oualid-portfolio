@@ -78,8 +78,6 @@
     const gridSize = 80;
     let currentCellX = -1;
     let currentCellY = -1;
-    let clickedCellX = -1;
-    let clickedCellY = -1;
 
     function updateHighlight(e) {
       const x = e.clientX;
@@ -87,70 +85,14 @@
       const cellX = Math.floor(x / gridSize) * gridSize;
       const cellY = Math.floor(y / gridSize) * gridSize;
 
-      // If moved to different square, fade out then update
-      if (cellX !== currentCellX || cellY !== currentCellY) {
-        if (currentCellX !== -1 || currentCellY !== -1) {
-          highlight.style.transition = 'opacity 0.2s ease';
-          highlight.style.opacity = '0';
-          
-          setTimeout(() => {
-            highlight.style.setProperty('--hx', `${cellX}px`);
-            highlight.style.setProperty('--hy', `${cellY}px`);
-            highlight.style.opacity = '1';
-            currentCellX = cellX;
-            currentCellY = cellY;
-          }, 50);
-        } else {
-          highlight.style.setProperty('--hx', `${cellX}px`);
-          highlight.style.setProperty('--hy', `${cellY}px`);
-          highlight.style.opacity = '1';
-          currentCellX = cellX;
-          currentCellY = cellY;
-        }
-      }
+      highlight.style.setProperty('--hx', `${cellX}px`);
+      highlight.style.setProperty('--hy', `${cellY}px`);
+      highlight.style.opacity = '1';
     }
 
     window.addEventListener('mousemove', updateHighlight);
     window.addEventListener('mouseleave', () => {
-      highlight.style.transition = 'opacity 0.2s ease';
       highlight.style.opacity = '0';
-      currentCellX = -1;
-      currentCellY = -1;
-    });
-
-    // Touch handlers for mobile
-    document.addEventListener('touchstart', (e) => {
-      const touch = e.touches[0];
-      const x = touch.clientX;
-      const y = touch.clientY;
-      const cellX = Math.floor(x / gridSize) * gridSize;
-      const cellY = Math.floor(y / gridSize) * gridSize;
-      highlight.style.setProperty('--hx', `${cellX}px`);
-      highlight.style.setProperty('--hy', `${cellY}px`);
-      highlight.style.opacity = '1';
-      currentCellX = cellX;
-      currentCellY = cellY;
-    });
-
-    document.addEventListener('touchmove', (e) => {
-      const touch = e.touches[0];
-      const x = touch.clientX;
-      const y = touch.clientY;
-      const cellX = Math.floor(x / gridSize) * gridSize;
-      const cellY = Math.floor(y / gridSize) * gridSize;
-      if (cellX !== currentCellX || cellY !== currentCellY) {
-        highlight.style.setProperty('--hx', `${cellX}px`);
-        highlight.style.setProperty('--hy', `${cellY}px`);
-        currentCellX = cellX;
-        currentCellY = cellY;
-      }
-    });
-
-    document.addEventListener('touchend', () => {
-      highlight.style.transition = 'opacity 0.2s ease';
-      highlight.style.opacity = '0';
-      currentCellX = -1;
-      currentCellY = -1;
     });
 
     // Click flip for highlighted cell
@@ -159,7 +101,6 @@
     function flipHighlight(e) {
       if (isFlipping) return;
       
-      // Get clicked position
       let x, y;
       if (e.touches) {
         x = e.touches[0].clientX;
@@ -173,10 +114,8 @@
       const cellY = Math.floor(y / gridSize) * gridSize;
       
       isFlipping = true;
-      clickedCellX = cellX;
-      clickedCellY = cellY;
 
-      // Update cell to clicked position temporarily
+      // Set highlight to clicked position
       highlightCell.style.setProperty('--hx', `${cellX}px`);
       highlightCell.style.setProperty('--hy', `${cellY}px`);
 
@@ -198,9 +137,6 @@
           boxShadow: '0 0 14px rgba(0,0,0,0.16)',
           onComplete: () => {
             isFlipping = false;
-            // Return to hover position if still hovering
-            highlightCell.style.setProperty('--hx', `${currentCellX}px`);
-            highlightCell.style.setProperty('--hy', `${currentCellY}px`);
           }
         });
     }
