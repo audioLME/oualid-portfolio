@@ -507,6 +507,10 @@ body {
     font-size: clamp(2.55rem, 12.75vw, 5.1rem);
   }
 
+  #subtitle-box {
+    margin-top: -100px;
+  }
+
   /* Smaller grid on mobile */
   #bg-lines {
     background-size: 50px 50px, 50px 50px;
