@@ -1,6 +1,6 @@
-﻿// ===== HERO MOTION EDITOR WITH GROUND PLANE =====
+﻿// ===== HERO MOTION EDITOR — FINAL STABLE VERSION =====
 
-// load GSAP Draggable
+// Load GSAP Draggable
 const draggableScript = document.createElement("script");
 draggableScript.src = "https://unpkg.com/gsap@3/dist/Draggable.min.js";
 document.head.appendChild(draggableScript);
@@ -8,14 +8,20 @@ document.head.appendChild(draggableScript);
 draggableScript.onload = () => init();
 
 function init() {
-  const LETTER_SCALE = 0.4;
-  const START_Y = -500;
+  /* ================= CONFIG ================= */
+  const LETTER_SCALE = 0.38;     // 🔒 LOCKED
+  const START_Y = -600;
   const PADDING = 8;
-  const FRAME_DURATION = 0.8;
 
-  // 🔒 GROUND POSITION (tweak this)
+  const GRAVITY_TIME = 0.9;
+  const X_LAG = 0.18;
+  const ROT_LAG = 0.28;
+  const IMPACT = 14;
+
+  // Ground calculated ONCE (resize-safe)
   const GROUND_Y = window.innerHeight * 0.68;
 
+  /* ================= ELEMENTS ================= */
   const letters = [
     document.querySelector(".o"),
     document.querySelector(".u"),
@@ -26,11 +32,11 @@ function init() {
   ];
 
   let frames = [];
-  window.framesData = frames;
+  window.framesData = frames; // exportable
 
   document.addEventListener("contextmenu", e => e.preventDefault());
 
-  // ---------- GROUND LINE ----------
+  /* ================= GROUND LINE ================= */
   const ground = document.createElement("div");
   ground.style.cssText = `
     position:fixed;
@@ -38,86 +44,23 @@ function init() {
     right:0;
     top:${GROUND_Y}px;
     height:1px;
-    background:rgba(0,0,0,0.2);
+    background:rgba(0,0,0,0.25);
     z-index:9998;
     pointer-events:none;
   `;
   document.body.appendChild(ground);
 
-  // ---------- INITIAL SETUP ----------
+  /* ================= INITIAL STATE ================= */
   gsap.set(letters, {
     scale: LETTER_SCALE,
-    y: START_Y,
     x: 0,
+    y: START_Y,
     rotate: 0,
-    opacity: 1,
     cursor: "grab",
     transformOrigin: "50% 100%"
   });
 
-  // ---------- UI BAR ----------
-  const bar = document.createElement("div");
-  bar.style.cssText = `
-    position:fixed;
-    left:0;
-    right:0;
-    bottom:0;
-    height:64px;
-    background:#111;
-    display:flex;
-    align-items:center;
-    gap:8px;
-    padding:8px;
-    z-index:9999;
-    font-family:monospace;
-  `;
-  document.body.appendChild(bar);
-
-  function renderBar() {
-    bar.innerHTML = "";
-
-    frames.forEach((_, i) => {
-      const btn = document.createElement("button");
-      btn.textContent = `F${i + 1}`;
-      btn.style.cssText = `
-        background:#222;
-        color:#fff;
-        border:1px solid #333;
-        padding:6px 10px;
-        cursor:pointer;
-      `;
-      btn.onclick = () => applyFrame(i);
-      bar.appendChild(btn);
-    });
-
-    const spacer = document.createElement("div");
-    spacer.style.flex = "1";
-    bar.appendChild(spacer);
-
-    const save = document.createElement("button");
-    save.textContent = "+ FRAME (T)";
-    save.style.cssText = `
-      background:#fff;
-      color:#000;
-      padding:6px 12px;
-      cursor:pointer;
-    `;
-    save.onclick = saveFrame;
-    bar.appendChild(save);
-
-    const play = document.createElement("button");
-    play.textContent = "PLAY (P)";
-    play.style.cssText = `
-      background:#0f0;
-      color:#000;
-      padding:6px 12px;
-      cursor:pointer;
-    `;
-    play.onclick = playTimeline;
-    bar.appendChild(play);
-  }
-
-  // ---------- COLLISIONS ----------
+  /* ================= COLLISION HELPERS ================= */
   function rectsOverlap(r1, r2) {
     return !(
       r1.right < r2.left + PADDING ||
@@ -127,16 +70,18 @@ function init() {
     );
   }
 
-  function resolveCollisions(active) {
-    const a = active.getBoundingClientRect();
-
-    // 🔒 FLOOR CONSTRAINT
-    if (a.bottom > GROUND_Y) {
-      gsap.set(active, {
-        y: `-=${a.bottom - GROUND_Y}`
-      });
+  function clampToGround(el) {
+    const rect = el.getBoundingClientRect();
+    if (rect.bottom > GROUND_Y) {
+      const delta = rect.bottom - GROUND_Y;
+      gsap.set(el, { y: `-=${delta}` });
     }
+  }
 
+  function resolveCollisions(active) {
+    clampToGround(active);
+
+    const a = active.getBoundingClientRect();
     letters.forEach(other => {
       if (other === active) return;
       const b = other.getBoundingClientRect();
@@ -146,19 +91,17 @@ function init() {
         const dy = (a.top + a.height / 2) - (b.top + b.height / 2);
 
         if (Math.abs(dx) > Math.abs(dy)) {
-          gsap.set(active, {
-            x: `+=${dx > 0 ? PADDING : -PADDING}`
-          });
+          gsap.set(active, { x: `+=${dx > 0 ? PADDING : -PADDING}` });
         } else {
-          gsap.set(active, {
-            y: `+=${dy > 0 ? PADDING : -PADDING}`
-          });
+          gsap.set(active, { y: `+=${dy > 0 ? PADDING : -PADDING}` });
         }
       }
     });
+
+    clampToGround(active);
   }
 
-  // ---------- DRAG + ROTATE ----------
+  /* ================= DRAG + ROTATE ================= */
   letters.forEach(letter => {
     let rotating = false;
     let startX = 0;
@@ -197,52 +140,127 @@ function init() {
     });
   });
 
-  // ---------- FRAMES ----------
+  /* ================= FRAME UI ================= */
+  const bar = document.createElement("div");
+  bar.style.cssText = `
+    position:fixed;
+    left:0; right:0; bottom:0;
+    height:64px;
+    background:#111;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:8px;
+    z-index:9999;
+    font-family:monospace;
+  `;
+  document.body.appendChild(bar);
+
+  function renderBar() {
+    bar.innerHTML = "";
+
+    frames.forEach((_, i) => {
+      const btn = document.createElement("button");
+      btn.textContent = `F${i + 1}`;
+      btn.style.cssText = `
+        background:#222;
+        color:#fff;
+        padding:6px 10px;
+        border:1px solid #333;
+        cursor:pointer;
+      `;
+      btn.onclick = () => applyFrame(i);
+      bar.appendChild(btn);
+    });
+
+    const spacer = document.createElement("div");
+    spacer.style.flex = "1";
+    bar.appendChild(spacer);
+
+    const save = document.createElement("button");
+    save.textContent = "+ FRAME (T)";
+    save.style.cssText = `background:#fff;color:#000;padding:6px 12px;`;
+    save.onclick = saveFrame;
+    bar.appendChild(save);
+
+    const play = document.createElement("button");
+    play.textContent = "PLAY (P)";
+    play.style.cssText = `background:#0f0;color:#000;padding:6px 12px;`;
+    play.onclick = playTimeline;
+    bar.appendChild(play);
+  }
+
+  /* ================= FRAME LOGIC ================= */
   function saveFrame() {
-    const frame = letters.map(l => ({
-      x: Math.round(gsap.getProperty(l, "x")),
-      y: Math.round(gsap.getProperty(l, "y")),
-      r: Math.round(gsap.getProperty(l, "rotate"))
-    }));
+    const frame = letters.map(l => {
+      clampToGround(l);
+      return {
+        x: Math.round(gsap.getProperty(l, "x")),
+        y: Math.round(gsap.getProperty(l, "y")),
+        r: Math.round(gsap.getProperty(l, "rotate"))
+      };
+    });
+
     frames.push(frame);
     renderBar();
     console.log(`FRAME ${frames.length} SAVED`, frame);
   }
 
   function applyFrame(i) {
-    frames[i].forEach((state, idx) => {
-      gsap.set(letters[idx], {
-        x: state.x,
-        y: state.y,
-        rotate: state.r
-      });
+    frames[i].forEach((s, idx) => {
+      gsap.set(letters[idx], s);
     });
   }
 
+  /* ================= GRAVITY PLAYBACK ================= */
   function playTimeline() {
     if (!frames.length) return;
 
     gsap.set(letters, { x: 0, y: START_Y, rotate: 0 });
 
     const tl = gsap.timeline();
+
     frames.forEach((frame, f) => {
-      frame.forEach((state, i) => {
-        tl.to(
-          letters[i],
-          {
-            x: state.x,
-            y: state.y,
-            rotate: state.r,
-            duration: FRAME_DURATION,
-            ease: "power3.inOut"
-          },
-          f * FRAME_DURATION
-        );
+      frame.forEach((s, i) => {
+        const mass = 1 + i * 0.12;
+
+        // Y fall (gravity)
+        tl.to(letters[i], {
+          y: s.y,
+          duration: GRAVITY_TIME * mass,
+          ease: "power4.in"
+        }, f);
+
+        // impact
+        tl.to(letters[i], {
+          y: s.y + IMPACT,
+          duration: 0.12
+        }, ">");
+
+        tl.to(letters[i], {
+          y: s.y,
+          duration: 0.22,
+          ease: "power3.out"
+        });
+
+        // X friction
+        tl.to(letters[i], {
+          x: s.x,
+          duration: GRAVITY_TIME * 0.6,
+          ease: "power2.out"
+        }, f + X_LAG);
+
+        // rotation settle
+        tl.to(letters[i], {
+          rotate: s.r,
+          duration: GRAVITY_TIME * 0.5,
+          ease: "power2.out"
+        }, f + ROT_LAG);
       });
     });
   }
 
-  // ---------- KEYS ----------
+  /* ================= KEYS ================= */
   window.addEventListener("keydown", e => {
     if (e.key.toLowerCase() === "t") saveFrame();
     if (e.key.toLowerCase() === "p") playTimeline();
@@ -251,7 +269,7 @@ function init() {
   renderBar();
 
   console.log(
-    "%cGROUND ACTIVE | DRAG = MOVE | RIGHT DRAG = ROTATE | T = SAVE | P = PLAY",
+    "%cHERO EDITOR READY — SCALE 0.38, GROUND CLAMPED, GRAVITY OK",
     "font-weight:bold;"
   );
 }
