@@ -8,6 +8,8 @@
 </head>
 <body>
 
+    <!-- Loading Overlay -->
+    <div id="loading-overlay"></div>
   <!-- HEADER -->
   <header class="site-header">
     <div class="logo"><span>O</span><span>U</span><span>A</span><span>L</span><span>I</span><span>D</span><span>&nbsp;</span><span>M</span><span>E</span><span>G</span><span>H</span><span>L</span><span>A</span><span>O</span><span>U</span><span>I</span></div>
@@ -48,11 +50,21 @@
     updateTime();
     setInterval(updateTime, 60000);
 
-    // Animate logo letters 3D flip
-    const tl = gsap.timeline({ repeat: -1 });
-    tl.to('.logo span', { rotationY: 180, duration: 0.5, stagger: 0.1 }, 0)
-      .to('.logo span', { rotationY: 0, duration: 0.5, stagger: 0.1 }, 0.5)
-      .to({}, { duration: 4 }, 1);
+    // Entry animation
+    const entryTl = gsap.timeline();
+    entryTl.to('#loading-overlay', { top: '100%', duration: 1, ease: 'power2.inOut' })
+      .fromTo('.logo', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.5')
+      .fromTo('.nav a', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.2 }, '-=0.3')
+      .call(() => {
+        // Start logo flip after buttons
+        const logoTl = gsap.timeline({ repeat: -1 });
+        logoTl.to('.logo span', { rotationY: 180, duration: 0.5, stagger: 0.1 }, 0)
+          .to('.logo span', { rotationY: 0, duration: 0.5, stagger: 0.1 }, 0.5)
+          .to({}, { duration: 4 }, 1);
+
+        // Start hero animation
+        gsap.fromTo(".letter", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, stagger: 0.08, ease: "power4.out" });
+      });
   </script>
 </body>
 </html>
