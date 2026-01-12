@@ -24,7 +24,7 @@ function showWord(word) {
   const els = container.querySelectorAll('.letter');
   const widths = Array.from(els).map(el => el.getBoundingClientRect().width);
   const sumWidths = widths.reduce((a, b) => a + b, 0);
-  const gap = Math.max(5, (containerWidth - sumWidths) / (widths.length - 1));
+  const gap = Math.min(20, Math.max(0, (containerWidth - sumWidths) / (widths.length - 1)));
   const totalWidth = sumWidths + (widths.length - 1) * gap;
   const startLeft = Math.max(0, (containerWidth - totalWidth) / 2);
   let currentLeft = startLeft;
