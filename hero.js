@@ -100,23 +100,22 @@ function showSubtitle() {
 
   positionSubtitle();
   
-  // Type in letter by letter
+  // Type in letter by letter (typewriter effect)
   gsap.fromTo(
     ".subtitle-letter",
-    { y: 50, opacity: 0 },
+    { opacity: 0 },
     {
-      y: 0,
       opacity: 1,
-      duration: 0.5,
-      stagger: 0.08,
-      ease: "power2.out"
+      duration: 0.3,
+      stagger: 0.1,
+      ease: "none"
     }
   );
 }
 
 function hideSubtitle(next) {
   gsap.to(".subtitle-letter", {
-    y: -50,
+    y: 50,
     opacity: 0,
     duration: 0.5,
     stagger: 0.04,
