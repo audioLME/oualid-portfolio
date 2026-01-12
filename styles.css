@@ -55,7 +55,7 @@ body {
 }
 
 .logo {
-  font-weight: 900;
+  font-weight: 1000;
   font-size: 25px;
   letter-spacing: 0.05em;
 }
@@ -138,6 +138,7 @@ body {
 
   .logo {
     font-size: 22px;
+    font-weight: 1000;
   }
 
   .nav a {
