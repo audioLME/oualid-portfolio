@@ -127,8 +127,14 @@ body {
 
 /* MOBILE */
 @media (max-width: 900px) {
-  .hero {
-    grid-template-columns: 1fr;
+  .site-header {
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px 24px;
+  }
+
+  .nav {
+    align-self: center;
   }
 
   .hero-text {
