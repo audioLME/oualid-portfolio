@@ -75,7 +75,7 @@
 
     // HOVER SYSTEM - tracks cursor and shows highlight box
     const highlight = document.getElementById('bg-highlight');
-    const gridSize = 80;
+    const gridSize = window.innerWidth <= 768 ? 50 : 80;
 
     function updateHighlight(e) {
       const x = e.clientX;
