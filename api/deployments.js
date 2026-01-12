@@ -1,7 +1,6 @@
 export default async function handler(req, res) {
   try {
     const token = process.env.PORTFOLIO_TOKEN;
-    const userId = 'pKyUvmoxBGJbvsBK1Vmc57uR';
     const projectId = 'prj_LgmzCBN6ozGtBH5oB3npJtctybES';
 
     if (!token) {
@@ -9,7 +8,7 @@ export default async function handler(req, res) {
     }
 
     const response = await fetch(
-      `https://api.vercel.com/v6/deployments?teamId=${userId}&projectId=${projectId}&state=READY&limit=1`,
+      `https://api.vercel.com/v6/deployments?projectId=${projectId}&state=READY&limit=1`,
       {
         headers: {
           'Authorization': `Bearer ${token}`
