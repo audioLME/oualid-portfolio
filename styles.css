@@ -64,8 +64,8 @@ body {
   top: var(--hy);
   width: var(--gsize);
   height: var(--gsize);
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: rgba(0, 0, 0, 0);
   box-shadow: 0 0 14px rgba(0, 0, 0, 0.16);
   transform: rotateY(0deg);
   transform-origin: 50% 50%;
