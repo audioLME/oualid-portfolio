@@ -54,6 +54,12 @@ body {
   font-weight: 700;
 }
 
+.logo span {
+  display: inline-block;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
 .nav {
   display: flex;
   gap: 32px;
