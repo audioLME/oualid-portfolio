@@ -82,11 +82,24 @@ function cycle() {
 
 function startCycle() {
   isPaused = false;
-  cycle();
+  
+  // Hide OUALID and start cycling from ARCHITECT
+  hideWord(() => {
+    wordIndex = 1; // Start from ARCHITECT
+    cycle();
+  });
 }
 
-// Initialize with first word visible
-showWord(words[0]);
+// Initialize with first word but invisible
+container.innerHTML = "";
+words[0].split("").forEach((char) => {
+  const el = document.createElement("div");
+  el.className = "letter";
+  el.textContent = char === " " ? "\u00A0" : char;
+  container.appendChild(el);
+});
+positionLetters();
+gsap.set(".letter", { y: 300, opacity: 0 });
 
 // Recalculate positions on window resize
 window.addEventListener('resize', positionLetters);

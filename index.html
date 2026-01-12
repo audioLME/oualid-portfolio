@@ -108,11 +108,12 @@
           .to({}, { duration: 4 }, 1);
       })
       .to('#animation-box', { opacity: 1, duration: 0.5 }, '+=0.2')
+      .fromTo('.letter', { y: 300, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, stagger: 0.08, ease: 'power4.out' })
+      .to('.hero-text', { opacity: 1, duration: 0.5 }, '+=0.5')
       .call(() => {
-        // Start hero word animation
-        startCycle();
-      })
-      .to('.hero-text', { opacity: 1, duration: 0.5 }, '+=0.5');
+        // Start cycling after OUALID has been shown for 2s
+        gsap.delayedCall(2, startCycle);
+      });
 
     // GRID HIGHLIGHT SYSTEM - single element for hover and flip
     const highlight = document.getElementById('bg-highlight');
