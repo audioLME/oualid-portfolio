@@ -1,33 +1,85 @@
-﻿// initial state
-gsap.set("#hero-letters .letter", {
-  y: 260,
+﻿// ===== HERO FAKE-PHYSICS PILE (v2 – scale fixed) =====
+
+// ===== TWEAKABLES =====
+const LETTER_SCALE = 0.75;      // 🔽 MAIN FIX: reduce overall letter size
+const GRAVITY_DISTANCE = 520;   // how far letters fall
+const BASE_Y = 100;             // ground level
+const STACK_OFFSET = 50;        // vertical stacking offset
+const ROTATION_RANGE = 12;      // max rotation in degrees
+
+// grab letters in order
+const letters = [
+  document.querySelector(".o"),
+  document.querySelector(".u"),
+  document.querySelector(".a"),
+  document.querySelector(".l"),
+  document.querySelector(".i"),
+  document.querySelector(".d")
+];
+
+// initial state: high above, invisible, scaled down
+gsap.set(letters, {
+  y: -GRAVITY_DISTANCE,
   opacity: 0,
-  rotate: () => gsap.utils.random(-8, 8)
+  scale: LETTER_SCALE,
+  rotate: () => gsap.utils.random(-ROTATION_RANGE, ROTATION_RANGE),
+  transformOrigin: "50% 100%"
 });
 
 const tl = gsap.timeline({
-  defaults: {
-    duration: 1.1,
-    ease: "power3.out"
-  }
+  defaults: { ease: "none" }
 });
+
+let currentStackY = BASE_Y;
+
+// helper: fake gravity fall
+function dropLetter(el, index) {
+  const mass = 1 + index * 0.15;
+  const rotation = gsap.utils.random(-ROTATION_RANGE, ROTATION_RANGE);
+
+  tl.to(el, {
+    opacity: 1,
+    duration: 0.15
+  }, "-=0.1");
+
+  // accelerated fall
+  tl.to(el, {
+    y: currentStackY,
+    rotate: rotation,
+    duration: 0.85 * mass,
+    ease: "power4.in"
+  });
+
+  // impact compression
+  tl.to(el, {
+    y: currentStackY + 16,
+    duration: 0.14,
+    ease: "power2.out"
+  });
+
+  // settle
+  tl.to(el, {
+    y: currentStackY,
+    duration: 0.32,
+    ease: "power3.out"
+  });
+
+  currentStackY -= STACK_OFFSET;
+}
 
 // subtle page settle
 tl.from("body", {
-  y: -40,
-  duration: 0.8,
+  y: -36,
+  duration: 0.75,
   ease: "power2.out"
 });
 
-// fake physics pile-up
-tl.to(".o", { y: 120, opacity: 1, rotate: -6 }, "-=0.2");
-tl.to(".u", { y: 160, opacity: 1, rotate: 8 }, "-=0.7");
-tl.to(".a", { y: 140, opacity: 1, rotate: -12 }, "-=0.7");
-tl.to(".l", { y: 180, opacity: 1, rotate: 4 }, "-=0.7");
-tl.to(".i", { y: 130, opacity: 1, rotate: -2 }, "-=0.7");
-tl.to(".d", { y: 160, opacity: 1, rotate: 10 }, "-=0.7");
+// causal pile sequence
+letters.forEach((letter, i) => {
+  tl.add(() => dropLetter(letter, i), i === 0 ? "+=0.1" : "+=0.05");
+});
 
 // freeze
 tl.add(() => {
-  gsap.set("#hero-letters .letter", { clearProps: "willChange" });
+  gsap.set(letters, { clearProps: "willChange" });
 });
