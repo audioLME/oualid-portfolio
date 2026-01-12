@@ -217,6 +217,29 @@ body {
   }
 }
 
+/* SMALLER TABLETS */
+@media (max-width: 900px) {
+  .logo {
+    font-size: 18px;
+  }
+
+  .nav a {
+    font-size: 14px;
+  }
+
+  .meta {
+    font-size: 14px;
+  }
+
+  .site-header {
+    padding: 0 24px;
+  }
+
+  .nav {
+    gap: 16px;
+  }
+}
+
 /* MOBILE */
 @media (max-width: 768px) {
   .site-header {
