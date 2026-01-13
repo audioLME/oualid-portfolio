@@ -457,6 +457,8 @@ window.addEventListener('resize', () => {
   resizeTimeout = setTimeout(() => {
     const svg = document.getElementById('shape-overlay');
     if (svg) svg.innerHTML = '';
-    generateRandomShapes();
+    // Restart continuous drawing after clearing
+    lines.length = 0; // Clear lines array
+    startContinuousDrawing();
   }, 500);
 });

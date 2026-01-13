@@ -21,7 +21,7 @@
 
   <!-- HEADER -->
   <header class="site-header">
-    <div class="logo"><span>O</span><span>U</span><span>A</span><span>L</span><span>I</span><span>D</span><span>&nbsp;</span><span>M</span><span>E</span><span>G</span><span>H</span><span>L</span><span>A</span><span>O</span><span>U</span><span>I</span></div>
+    <a href="/" class="logo"><span>O</span><span>U</span><span>A</span><span>L</span><span>I</span><span>D</span><span>&nbsp;</span><span>M</span><span>E</span><span>G</span><span>H</span><span>L</span><span>A</span><span>O</span><span>U</span><span>I</span></a>
 
     <nav class="nav">
       <a href="#">RESUME</a>
@@ -44,6 +44,12 @@
 
     <section class="hero-text">
       <h1 id="hero-heading"></h1>
+      <button id="continue-arrow" class="continue-btn">
+        <span class="continue-text">CONTINUE</span>
+        <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 3L3 3L3 8M16 3L21 3L21 8M21 16L21 21L16 21M3 16L3 21L8 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
     </section>
   </main>
 
@@ -130,6 +136,7 @@
           animateHeroText();
         }
       }, null, '+=0.5')
+      .to('.continue-btn', { opacity: 1, duration: 0.8, ease: 'power2.out' }, '+=4')
       .call(() => {
         // Start cycling after OUALID has been shown for 2.5s
         if (typeof startCycle === 'function') {
@@ -230,6 +237,51 @@
 
     window.addEventListener('click', flipCell_onClick);
     document.addEventListener('touchend', flipCell_onClick);
+
+    // Continue button expand animation
+    document.getElementById('continue-arrow').addEventListener('click', (e) => {
+      e.stopPropagation(); // Prevent grid flip
+      
+      const btn = e.currentTarget;
+      const rect = btn.getBoundingClientRect();
+      
+      // Create fullscreen overlay
+      const overlay = document.createElement('div');
+      overlay.style.cssText = `
+        position: fixed;
+        left: ${rect.left}px;
+        top: ${rect.top}px;
+        width: ${rect.width}px;
+        height: ${rect.height}px;
+        background: #111;
+        border-radius: 4px;
+        z-index: 9999;
+        pointer-events: none;
+      `;
+      document.body.appendChild(overlay);
+      
+      // Animate expansion
+      gsap.to(overlay, {
+        left: 0,
+        top: 0,
+        width: '100vw',
+        height: '100vh',
+        borderRadius: 0,
+        duration: 1,
+        ease: 'ease',
+        onComplete: () => {
+          // Navigate to about page or trigger next section
+          window.location.href = 'about.html';
+        }
+      });
+      
+      // Fade out button
+      gsap.to(btn, {
+        opacity: 0,
+        duration: 0.6,
+        ease: 'ease'
+      });
+    });
   </script>
 </body>
 </html>
