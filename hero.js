@@ -89,6 +89,7 @@ function showWord(word, animate = true) {
 }
 
 function hideWord(next) {
+  // Hide main animation letters
   gsap.to(".letter", {
     y: -300,
     opacity: 0,
@@ -133,7 +134,9 @@ function hideSubtitle(next) {
     duration: 0.5,
     stagger: 0.04,
     ease: "power2.in",
-    onComplete: next
+    onComplete: () => {
+      if (next) next();
+    }
   });
 }
 
@@ -142,10 +145,14 @@ function cycle() {
   
   showWord(words[wordIndex]);
   
+  const continueBtn = document.getElementById('continue-arrow');
+  
   // Show subtitle only for OUALID
   if (words[wordIndex] === "OUALID") {
     gsap.delayedCall(0.9, showSubtitle);
   }
+  
+  // Continue button is always visible now, no need to hide/show per word
 
   gsap.delayedCall(2.5, () => {
     const hideActions = [() => hideWord(() => {
@@ -211,6 +218,7 @@ function animateHeroText() {
     // Split by words first to keep them together
     const words = line.split(' ');
     
+    let letterIndex = 0;
     words.forEach((word) => {
       const wordSpan = document.createElement('span');
       wordSpan.style.display = 'inline-block';
@@ -223,6 +231,8 @@ function animateHeroText() {
         letterSpan.textContent = char;
         letterSpan.style.display = 'inline-block';
         letterSpan.style.clipPath = 'inset(0 100% 0 0)';
+        letterSpan.style.setProperty('--letter-index', letterIndex);
+        letterIndex++;
         wordSpan.appendChild(letterSpan);
       });
       

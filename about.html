@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>About - Oualid Meghlaoui</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      background: #111 !important;
+      color: #eee9e4 !important;
+    }
+
+    .site-header {
+      background: #111 !important;
+    }
+    .logo,
+    .nav a,
+    .meta {
+      color: #eee9e4 !important;
+    }
+    .hourglass polygon {
+      fill: #eee9e4 !important;
+    }
+    #version-indicator {
+      color: #eee9e4 !important;
+    }
+    #bg-lines {
+      background:
+        linear-gradient(rgba(238, 233, 228, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(238, 233, 228, 0.06) 1px, transparent 1px),
+        linear-gradient(rgba(238, 233, 228, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(238, 233, 228, 0.04) 1px, transparent 1px),
+        linear-gradient(rgba(238, 233, 228, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(238, 233, 228, 0.02) 1px, transparent 1px) !important;
+      background-size: 80px 80px, 80px 80px, 40px 40px, 40px 40px, 20px 20px, 20px 20px !important;
+      mix-blend-mode: lighten !important;
+      opacity: 0;
+    }
+    #bg-highlight {
+      border-color: rgba(238, 233, 228, 0.06) !important;
+      background-color: rgba(238, 233, 228, 0.03) !important;
+      mix-blend-mode: normal !important;
+      backface-visibility: visible !important;
+    }
+    #shape-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    #shape-overlay polyline {
+      stroke: #eee9e4 !important;
+      stroke-width: 1 !important;
+      fill: none !important;
+      mix-blend-mode: lighten !important;
+    }
+    .site-header {
+      transform: translateY(-100px);
+    }
+    #grid-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      perspective: 600px;
+      perspective-origin: center bottom;
+    }
+    #grid-container .grid-line {
+      position: absolute;
+      background: rgba(238, 233, 228, 0.06);
+      transform-origin: center center;
+      transform: rotateX(90deg) scale(0.8);
+    }
+    #grid-container .grid-line.gen-0 {
+      background: rgba(238, 233, 228, 0.06);
+    }
+    #grid-container .grid-line.gen-1 {
+      background: rgba(238, 233, 228, 0.03);
+    }
+    #grid-container .grid-line.gen-2 {
+      background: rgba(238, 233, 228, 0.015);
+    }
+    #grid-container .grid-line.gen-3 {
+      background: rgba(238, 233, 228, 0.0075);
+    }
+    #grid-container .grid-line.vertical {
+      width: 1px;
+      height: 100%;
+    }
+    #grid-container .grid-line.horizontal {
+      width: 100%;
+      height: 1px;
+    }
+    .about-content h1,
+    .about-content p {
+      color: #eee9e4 !important;
+    }
+    .about-content {
+      opacity: 0;
+    }
+    .nav a {
+      border: 1px solid rgba(238, 233, 228, 0.06);
+      padding: 8px 12px;
+      transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+      cursor: pointer;
+    }
+    .nav a.inverted {
+      background-color: #eee9e4;
+      color: #111 !important;
+      border-color: #eee9e4;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Lines Grid -->
+    <div id="bg-lines"></div>
+    <div id="grid-container"></div>
+    <svg id="shape-overlay" style="position: fixed; inset: 0; pointer-events: none; z-index: 0;"></svg>
+    <div id="bg-highlight"></div>
+
+    <!-- Version Indicator -->
+    <div id="version-indicator">v0.0.00</div>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <a href="/" class="logo"><span>O</span><span>U</span><span>A</span><span>L</span><span>I</span><span>D</span><span>&nbsp;</span><span>M</span><span>E</span><span>G</span><span>H</span><span>L</span><span>A</span><span>O</span><span>U</span><span>I</span></a>
+
+    <nav class="nav">
+      <a href="#">RESUME</a>
+      <a href="#">PORTFOLIO</a>
+      <a href="#">CONTACT</a>
+    </nav>
+
+    <div class="meta" id="time-display">Algeria&nbsp;&nbsp;&nbsp;<svg class="hourglass" width="12" height="15" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <polygon points="0,0 16,0 8,10" fill="#111"/>
+  <polygon points="8,10 0,20 16,20" fill="#111"/>
+</svg>&nbsp;&nbsp;&nbsp;00:00 AM&nbsp;&nbsp;&nbsp;Jan 1, 2026</div>
+  </header>
+
+  <!-- ABOUT CONTENT -->
+  <main class="about-page">
+    <section class="about-content">
+      <h1>About</h1>
+      <p>Content goes here...</p>
+    </section>
+  </main>
+
+  <!-- GSAP -->
+  <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+  <script src="shapes.js"></script>
+  <script>
+    // Grid construction animation - creates perfect squares with responsive sizing
+    function createRecursiveGrid() {
+      const container = document.getElementById('grid-container');
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      
+      // Responsive grid sizes: 80px on desktop, 50px on mobile
+      const baseGridSize = viewportWidth <= 768 ? 50 : 80;
+      const gridSizes = [baseGridSize, baseGridSize / 2, baseGridSize / 4, baseGridSize / 8];
+      
+      gridSizes.forEach((size, index) => {
+        const lineClass = `gen-${index}`;
+        
+        // Vertical lines
+        for (let x = size; x < viewportWidth; x += size) {
+          const line = document.createElement('div');
+          line.className = `grid-line vertical ${lineClass}`;
+          line.style.cssText = `
+            left: ${x}px;
+            top: 0;
+            transform-origin: ${x}px ${viewportHeight / 2}px;
+          `;
+          container.appendChild(line);
+        }
+        
+        // Horizontal lines
+        for (let y = size; y < viewportHeight; y += size) {
+          const line = document.createElement('div');
+          line.className = `grid-line horizontal ${lineClass}`;
+          line.style.cssText = `
+            left: 0;
+            top: ${y}px;
+            transform-origin: ${viewportWidth / 2}px ${y}px;
+          `;
+          container.appendChild(line);
+        }
+      });
+    }
+    
+    createRecursiveGrid();
+    // Fetch version from Vercel deployments, fallback to GitHub
+    async function updateVersion() {
+      try {
+        // Try Vercel API first
+        const response = await fetch('/api/deployments');
+        const data = await response.json();
+        if (data.version) {
+          document.getElementById('version-indicator').textContent = data.version;
+          return;
+        }
+      } catch (error) {
+        console.log('Vercel API failed, trying GitHub...');
+      }
+
+      // Fallback to GitHub commits
+      try {
+        const response = await fetch('https://api.github.com/repos/audiolME/oualid-portfolio/commits?per_page=1');
+        const linkHeader = response.headers.get('Link');
+        let commitCount = 1;
+        
+        if (linkHeader) {
+          const match = linkHeader.match(/page=(\d+)>; rel="last"/);
+          if (match) commitCount = parseInt(match[1]);
+        }
+        
+        const minor = Math.floor(commitCount / 100);
+        const patch = (commitCount % 100).toString().padStart(2, '0');
+        const version = `v0.${minor}.${patch}`;
+        
+        document.getElementById('version-indicator').textContent = version;
+      } catch (error) {
+        console.log('Version fetch failed');
+      }
+    }
+    updateVersion();
+
+    function updateTime() {
+      const now = new Date();
+      const timeString = now.toLocaleString('en-US', {timeZone: 'Africa/Algiers', hour12: true, hour: 'numeric', minute: '2-digit'});
+      const dateString = now.toLocaleString('en-US', {timeZone: 'Africa/Algiers', month: 'short', day: 'numeric', year: 'numeric'});
+      document.getElementById('time-display').innerHTML = `Algeria\u00A0\u00A0\u00A0<svg class="hourglass" width="12" height="15" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <polygon points="0,0 16,0 8,10" fill="#eee9e4"/>
+  <polygon points="8,10 0,20 16,20" fill="#eee9e4"/>
+</svg>\u00A0\u00A0\u00A0${timeString}\u00A0\u00A0\u00A0${dateString}`;
+    }
+    updateTime();
+    setInterval(updateTime, 60000);
+
+    // Entry animation (no loading overlay)
+    const entryTl = gsap.timeline();
+    
+    // 1. Generate and animate grid construction by generation with 3D perspective
+    // Gen 0 (center crosshair)
+    entryTl.to('.grid-line.gen-0', { 
+      rotateX: 0, 
+      scale: 1, 
+      duration: 0.8, 
+      ease: 'power2.out' 
+    }, 0)
+    
+    // Gen 1
+      .to('.grid-line.gen-1', { 
+        rotateX: 0, 
+        scale: 1, 
+        duration: 0.8, 
+        ease: 'power2.out' 
+      }, 0.45)
+    
+    // Gen 2
+      .to('.grid-line.gen-2', { 
+        rotateX: 0, 
+        scale: 1, 
+        duration: 0.8, 
+        ease: 'power2.out' 
+      }, 0.9)
+    
+    // Gen 3
+      .to('.grid-line.gen-3', { 
+        rotateX: 0, 
+        scale: 1, 
+        duration: 0.8, 
+        ease: 'power2.out' 
+      }, 1.35)
+    
+    // 2. Header slides down (during grid animation)
+      .to('.site-header', { y: 0, duration: 1.8, ease: 'power2.out' }, 0.9)
+    
+    // 3. Logo flip starts after header is visible
+      .call(() => {
+        const logoTl = gsap.timeline({ repeat: -1 });
+        logoTl.to('.logo span', { rotationY: 180, duration: 0.5, stagger: 0.1 }, 0)
+          .to('.logo span', { rotationY: 0, duration: 0.5, stagger: 0.1 }, 0.5)
+          .to({}, { duration: 4 }, 1);
+      }, null, 0.4)
+    
+    // 4. About content fades in
+      .fromTo('.about-content', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }, 1.8);
+
+    // GRID HIGHLIGHT SYSTEM - single element for hover and flip
+    const highlight = document.getElementById('bg-highlight');
+    let inactivityTimer;
+    let isFlipping = false;
+    let lastTouchX = 0;
+    let lastTouchY = 0;
+
+    function getGridSize() {
+      return window.innerWidth <= 768 ? 50 : 80;
+    }
+
+    function updateHighlight(e) {
+      const gridSize = getGridSize();
+      const x = e.clientX;
+      const y = e.clientY;
+      const cellX = Math.floor(x / gridSize) * gridSize;
+      const cellY = Math.floor(y / gridSize) * gridSize;
+
+      highlight.style.setProperty('--hx', `${cellX}px`);
+      highlight.style.setProperty('--hy', `${cellY}px`);
+      
+      if (!isFlipping) {
+        highlight.style.opacity = '1';
+      }
+
+      // Reset inactivity timer
+      clearTimeout(inactivityTimer);
+      inactivityTimer = setTimeout(() => {
+        if (!isFlipping) highlight.style.opacity = '0';
+      }, 1000);
+    }
+
+    window.addEventListener('mousemove', updateHighlight);
+    window.addEventListener('mouseleave', () => {
+      clearTimeout(inactivityTimer);
+      if (!isFlipping) highlight.style.opacity = '0';
+    });
+
+    // Track touch position
+    document.addEventListener('touchstart', (e) => {
+      const touch = e.touches[0];
+      lastTouchX = touch.clientX;
+      lastTouchY = touch.clientY;
+    });
+
+    // Click/touch to flip
+    function flipCell_onClick(e) {
+      if (isFlipping) return;
+      
+      const gridSize = getGridSize();
+      let x, y;
+      if (e.type === 'touchend') {
+        x = lastTouchX;
+        y = lastTouchY;
+      } else {
+        x = e.clientX;
+        y = e.clientY;
+      }
+      
+      const cellX = Math.floor(x / gridSize) * gridSize;
+      const cellY = Math.floor(y / gridSize) * gridSize;
+      
+      isFlipping = true;
+      
+      // Position at click location and show
+      highlight.style.setProperty('--hx', `${cellX}px`);
+      highlight.style.setProperty('--hy', `${cellY}px`);
+      highlight.style.opacity = '1';
+      
+      const tl = gsap.timeline();
+      tl.to(highlight, {
+        rotationY: 180,
+        duration: 0.35,
+        ease: 'power2.in',
+        backgroundColor: 'rgb(238, 233, 228)',
+        borderColor: 'rgb(238, 233, 228)',
+        boxShadow: '0 0 14px rgba(238,233,228,0.6)',
+        mixBlendMode: 'normal',
+        opacity: 1
+      })
+        .to(highlight, {
+          rotationY: 0,
+          duration: 0.35,
+          ease: 'power2.out',
+          backgroundColor: 'rgba(238, 233, 228, 0)',
+          borderColor: 'rgba(238, 233, 228, 0.06)',
+          boxShadow: '0 0 14px rgba(238,233,228,0.16)',
+          mixBlendMode: 'normal',
+          onComplete: () => {
+            isFlipping = false;
+          }
+        });
+    }
+
+    window.addEventListener('click', flipCell_onClick);
+    document.addEventListener('touchend', flipCell_onClick);
+
+    // Nav link invert effect
+    document.querySelectorAll('.nav a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        if (link.classList.contains('inverted')) {
+          link.classList.remove('inverted');
+        } else {
+          // Remove inverted from other links
+          document.querySelectorAll('.nav a.inverted').forEach(other => {
+            if (other !== link) other.classList.remove('inverted');
+          });
+          link.classList.add('inverted');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
