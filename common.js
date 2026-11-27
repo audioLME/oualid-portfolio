@@ -126,52 +126,109 @@
     document.addEventListener('touchend', flip);
   }
 
-  /* ---------- page transition ---------- */
-  // A box grows from the clicked button to fill the screen, then the next
-  // page loads underneath it (same effect as the Continue button).
+  /* ---------- page transitions ---------- */
   const reduce = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const CUT_ANGLE = 17 * Math.PI / 180; // tilt of the scissor cut from vertical
   let leaving = false;
 
-  function wipeTo(href, fromEl, opts = {}) {
+  // Home page: a line cuts the screen at an angle, then the two halves slide
+  // apart (left and right) and reveal the dark page underneath.
+  function cutTo(href) {
     if (leaving) return;
-    if (reduce() || typeof gsap === 'undefined' || !fromEl) { location.href = href; return; }
+    if (reduce() || typeof gsap === 'undefined') { location.href = href; return; }
     leaving = true;
-    const r = fromEl.getBoundingClientRect();
-    const box = document.createElement('div');
-    box.className = 'page-wipe';
-    box.style.left = r.left + 'px';
-    box.style.top = r.top + 'px';
-    box.style.width = r.width + 'px';
-    box.style.height = r.height + 'px';
-    document.body.appendChild(box);
-    gsap.to(box, {
-      left: 0, top: 0, width: '100vw', height: '100vh',
-      borderColor: 'rgba(238,233,228,0)',
-      duration: opts.duration || 0.9,
-      ease: 'power2.inOut',
+
+    const vw = window.innerWidth, vh = window.innerHeight;
+    const off = Math.tan(CUT_ANGLE) * vh / 2;
+    const xTop = vw / 2 + off, xBot = vw / 2 - off;
+
+    const layer = document.createElement('div');
+    layer.className = 'cut-layer';
+    const under = document.createElement('div');
+    under.className = 'cut-under';
+    layer.appendChild(under);
+
+    // two copies of the current screen, each clipped to one side of the cut
+    const snapshot = () => {
+      const wrap = document.createElement('div');
+      Array.from(document.body.children).forEach(el => {
+        if (el.tagName === 'SCRIPT' || el === layer) return;
+        wrap.appendChild(el.cloneNode(true));
+      });
+      return wrap;
+    };
+    const left = document.createElement('div');
+    const right = document.createElement('div');
+    left.className = right.className = 'cut-half';
+    left.style.clipPath = `polygon(0 0, ${xTop}px 0, ${xBot}px ${vh}px, 0 ${vh}px)`;
+    right.style.clipPath = `polygon(${xTop}px 0, ${vw}px 0, ${vw}px ${vh}px, ${xBot}px ${vh}px)`;
+    left.appendChild(snapshot());
+    right.appendChild(snapshot());
+    layer.appendChild(left);
+    layer.appendChild(right);
+
+    // the scissor line
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS, 'svg');
+    svg.setAttribute('class', 'cut-line');
+    svg.setAttribute('viewBox', `0 0 ${vw} ${vh}`);
+    const ln = document.createElementNS(svgNS, 'line');
+    ln.setAttribute('x1', xTop); ln.setAttribute('y1', -10);
+    ln.setAttribute('x2', xBot); ln.setAttribute('y2', vh + 10);
+    const len = Math.hypot(xTop - xBot, vh + 20);
+    ln.setAttribute('stroke-dasharray', len);
+    ln.setAttribute('stroke-dashoffset', len);
+    svg.appendChild(ln);
+    layer.appendChild(svg);
+    document.body.appendChild(layer);
+
+    // halves move away from the cut, perpendicular to it
+    const d = vw * 0.75 + off;
+    const nx = Math.cos(CUT_ANGLE) * d, ny = Math.sin(CUT_ANGLE) * d;
+    gsap.timeline({ onComplete: () => { location.href = href; } })
+      .to(ln, { attr: { 'stroke-dashoffset': 0 }, duration: 0.35, ease: 'power2.in' })
+      .to(svg, { opacity: 0, duration: 0.15 }, '+=0.05')
+      .to(left, { x: -nx, y: -ny, rotation: -2, duration: 0.75, ease: 'power3.inOut' }, '<')
+      .to(right, { x: nx, y: ny, rotation: 2, duration: 0.75, ease: 'power3.inOut' }, '<');
+  }
+
+  // Dark pages: content fades out, the next page rebuilds the room.
+  function fadeTo(href) {
+    if (leaving) return;
+    if (reduce() || typeof gsap === 'undefined') { location.href = href; return; }
+    leaving = true;
+    gsap.to('.page, .about-page, .site-footer, #room-canvas, #hologram-canvas', {
+      opacity: 0, duration: 0.4, ease: 'power1.in',
       onComplete: () => { location.href = href; }
     });
+  }
+
+  function goTo(href) {
+    if (document.documentElement.classList.contains('theme-dark')) fadeTo(href);
+    else cutTo(href);
   }
 
   function initNavTransitions() {
     document.querySelectorAll('.nav a, [data-wipe]').forEach(a => {
       a.addEventListener('click', e => {
         if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-        if (a.getAttribute('aria-current') === 'page') { e.preventDefault(); return; }
         e.preventDefault();
         e.stopPropagation(); // no grid-cell flip
-        wipeTo(a.href, a);
+        if (a.getAttribute('aria-current') === 'page') return;
+        goTo(a.href);
       });
     });
-    // Coming back with the browser's Back button: remove a finished wipe
+    // Coming back with the browser's Back button: undo a finished transition
     window.addEventListener('pageshow', e => {
       if (!e.persisted) return;
       leaving = false;
-      document.querySelectorAll('.page-wipe').forEach(el => el.remove());
+      document.querySelectorAll('.cut-layer').forEach(el => el.remove());
+      document.querySelectorAll('.page, .about-page, .site-footer, #room-canvas, #hologram-canvas')
+        .forEach(el => { el.style.opacity = ''; });
     });
   }
 
-  /* ---------- dark pages: room intro, header, holograms ---------- */
+  /* ---------- dark pages: room builds, then header/text, then shapes ---------- */
   function darkEntry() {
     if (window.Room3D) Room3D.init();
     const startHolos = () => { if (typeof initHolograms === 'function') initHolograms(); };
@@ -181,15 +238,15 @@
       return;
     }
     const tl = gsap.timeline()
-      .fromTo('.site-header', { yPercent: -100 }, { yPercent: 0, duration: 1.2, ease: 'power2.out' }, 0.3)
-      .call(startLogoFlip, null, 0.9)
-      .call(startHolos, null, 0.7);
+      .fromTo('.site-header', { yPercent: -100 }, { yPercent: 0, duration: 0.8, ease: 'power2.out' }, 1.2)
+      .call(startLogoFlip, null, 1.6)
+      .call(startHolos, null, 2.0);
     if (document.querySelector('.about-content')) {
-      tl.fromTo('.about-content', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }, 1.0);
+      tl.fromTo('.about-content', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }, 1.4);
     }
   }
 
-  window.Site = { updateTime, updateVersion, startLogoFlip, initGridHighlight, wipeTo, darkEntry };
+  window.Site = { updateTime, updateVersion, startLogoFlip, initGridHighlight, cutTo, fadeTo, goTo, darkEntry };
   initNavTransitions();
 
   markActiveNav();

@@ -314,7 +314,7 @@
 
   function drawFloorRing(h, alpha) {
     if (alpha <= 0.01) return;
-    const rings = [[h.r * 1.5, 0.30], [h.r * 0.95, 0.16]];
+    const rings = [[h.r * 1.5, 0.18], [h.r * 0.95, 0.10]];
     ctx.save();
     ctx.shadowBlur = 0;
     rings.forEach(([rad, k]) => {
@@ -338,7 +338,7 @@
       ctx.beginPath();
       ctx.moveTo(a[0], a[1]);
       ctx.lineTo(b[0], b[1]);
-      ctx.strokeStyle = `rgba(${INK},${alpha * 0.18})`;
+      ctx.strokeStyle = `rgba(${INK},${alpha * 0.12})`;
       ctx.stroke();
       ctx.setLineDash([]);
     }
@@ -366,7 +366,8 @@
     const drawnLen = u * total;
     const erasedLen = e * total;
 
-    let alpha = 0.85 * (0.94 + 0.06 * Math.sin(t * 23 + h.phase));
+    // kept soft so the shapes stay in the background, behind the text
+    let alpha = 0.42 * (0.94 + 0.06 * Math.sin(t * 23 + h.phase));
     if (glitching) alpha *= 0.4;
 
     ctx.save();
@@ -374,8 +375,8 @@
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
     ctx.strokeStyle = `rgba(${INK},${alpha})`;
-    ctx.shadowColor = `rgba(${INK},0.55)`;
-    ctx.shadowBlur = 8;
+    ctx.shadowColor = `rgba(${INK},0.25)`;
+    ctx.shadowBlur = 4;
 
     const sAvg = project(h.cx, h.cy, h.cz);
     ctx.lineWidth = clamp(1.3 * (sAvg ? sAvg[2] : 1), 0.9, 2.2);
@@ -425,9 +426,9 @@
     if (headPoint) {
       const q = project(headPoint[0], headPoint[1], headPoint[2]);
       if (q) {
-        ctx.shadowColor = `rgba(${INK},0.9)`;
-        ctx.shadowBlur = 16;
-        ctx.fillStyle = `rgba(${INK},1)`;
+        ctx.shadowColor = `rgba(${INK},0.5)`;
+        ctx.shadowBlur = 10;
+        ctx.fillStyle = `rgba(${INK},0.6)`;
         ctx.beginPath();
         ctx.arc(q[0], q[1], 2.6 * q[2], 0, Math.PI * 2);
         ctx.fill();

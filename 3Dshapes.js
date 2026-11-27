@@ -20,7 +20,9 @@
   let cvs, ctx, vw = 0, vh = 0, dpr = 1;
   let m = null;              // room metrics
   let push = 0;              // 0 = room in place, 1 = pushed back (intro start)
-  let planeAlpha = [1, 1, 1, 1, 1];
+  let planeAlpha = [1, 1, 1, 1, 1];  // floor, ceiling, left, right, back
+  let planeShift = [0, 0, 0, 0];     // intro: floor/ceiling/left/right offset (0..1)
+  let offX = 0, offY = 0;            // screen offset applied while drawing a plane
   let lastW = 0, lastH = 0;
 
   function metrics() {
@@ -53,7 +55,7 @@
     const den = m.cam - zz;
     if (den < 60) return null;
     const s = m.cam / den;
-    return [m.ox + x * s, m.oy + y * s, s];
+    return [m.ox + x * s + offX, m.oy + y * s + offY, s];
   }
 
   // brightness by depth: nearer lines are brighter
@@ -100,19 +102,24 @@
     const zs = k => zB + (k / nz) * (zF - zB);
     const [aFloor, aCeil, aLeft, aRight, aBack] = planeAlpha;
 
-    // floor and ceiling
-    [[floorY, aFloor, 0.16], [ceilY, aCeil, 0.12]].forEach(([y, a, base]) => {
+    // floor (slides up from below) and ceiling (slides down from above)
+    [[floorY, aFloor, 0.16, planeShift[0] * vh * 0.6],
+     [ceilY, aCeil, 0.12, -planeShift[1] * vh * 0.6]].forEach(([y, a, base, dy]) => {
       if (a <= 0) return;
+      offX = 0; offY = dy;
       for (let i = 1; i < nx; i++) depthLine(xs(i), y, base * a);
       for (let k = 1; k <= nz; k++) {
         const z = zs(k);
         line([-halfW, y, z], [halfW, y, z], base * a * depthFade(z));
       }
+      depthLine(-halfW, y, 0.22 * a);
+      depthLine(halfW, y, 0.22 * a);
     });
 
-    // side walls
-    [[-halfW, aLeft], [halfW, aRight]].forEach(([x, a]) => {
+    // side walls (slide in from the left and right edges)
+    [[-halfW, aLeft, -planeShift[2] * vw * 0.6], [halfW, aRight, planeShift[3] * vw * 0.6]].forEach(([x, a, dx]) => {
       if (a <= 0) return;
+      offX = dx; offY = 0;
       const base = 0.09;
       for (let j = 1; j < ny; j++) depthLine(x, ys(j), base * a);
       for (let k = 1; k <= nz; k++) {
@@ -120,22 +127,18 @@
         line([x, ceilY, z], [x, floorY, z], base * a * depthFade(z));
       }
     });
+    offX = 0; offY = 0;
 
-    // back wall
+    // back wall (fades in last)
     if (aBack > 0) {
       const base = 0.07 * aBack;
       for (let i = 1; i < nx; i++) line([xs(i), ceilY, zB], [xs(i), floorY, zB], base);
       for (let j = 1; j < ny; j++) line([-halfW, ys(j), zB], [halfW, ys(j), zB], base);
-    }
-
-    // room edges, slightly brighter so the box reads clearly
-    const e = Math.min(aFloor, aCeil, aLeft, aRight, aBack) * 0.22;
-    if (e > 0) {
-      [[-halfW, ceilY], [halfW, ceilY], [-halfW, floorY], [halfW, floorY]].forEach(([x, y]) => depthLine(x, y, e));
-      line([-halfW, ceilY, zB], [halfW, ceilY, zB], e * 0.6);
-      line([-halfW, floorY, zB], [halfW, floorY, zB], e * 0.6);
-      line([-halfW, ceilY, zB], [-halfW, floorY, zB], e * 0.6);
-      line([halfW, ceilY, zB], [halfW, floorY, zB], e * 0.6);
+      const e = 0.13 * aBack;
+      line([-halfW, ceilY, zB], [halfW, ceilY, zB], e);
+      line([-halfW, floorY, zB], [halfW, floorY, zB], e);
+      line([-halfW, ceilY, zB], [-halfW, floorY, zB], e);
+      line([halfW, ceilY, zB], [halfW, floorY, zB], e);
     }
   }
 
@@ -153,21 +156,40 @@
   }
 
   const easeOut = t => 1 - Math.pow(1 - t, 3);
+  const prog = (t, start, dur) => Math.max(0, Math.min(1, (t - start) / dur));
 
-  // Room flies in from the back while each plane fades in
-  function intro(duration = 1.6) {
+  // The room assembles: side walls slide in first; before they land the
+  // floor rises from the bottom, then the ceiling drops from the top; the
+  // back wall fades in last.
+  function intro() {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduce) { push = 0; planeAlpha = [1, 1, 1, 1, 1]; draw(); return; }
+    if (reduce) { push = 0; planeAlpha = [1, 1, 1, 1, 1]; planeShift = [0, 0, 0, 0]; draw(); return; }
+    const plan = {          // [start, duration] in seconds
+      left: [0, 1.1], right: [0, 1.1],
+      floor: [0.3, 0.9], ceil: [0.5, 0.9],
+      back: [1.0, 0.6]
+    };
+    const end = 1.6;
     const start = performance.now();
     const step = now => {
       const t = (now - start) / 1000;
-      push = 1 - easeOut(Math.min(1, t / duration));
-      planeAlpha = planeAlpha.map((_, i) => easeOut(Math.max(0, Math.min(1, (t - i * 0.12) / 0.8))));
+      const pF = easeOut(prog(t, ...plan.floor));
+      const pC = easeOut(prog(t, ...plan.ceil));
+      const pL = easeOut(prog(t, ...plan.left));
+      const pR = easeOut(prog(t, ...plan.right));
+      planeShift = [1 - pF, 1 - pC, 1 - pL, 1 - pR];
+      planeAlpha = [
+        Math.min(1, pF * 1.6), Math.min(1, pC * 1.6),
+        Math.min(1, pL * 1.6), Math.min(1, pR * 1.6),
+        easeOut(prog(t, ...plan.back))
+      ];
+      push = 0;
       draw();
-      if (t < duration) requestAnimationFrame(step);
+      if (t < end) requestAnimationFrame(step);
     };
-    push = 1;
     planeAlpha = [0, 0, 0, 0, 0];
+    planeShift = [1, 1, 1, 1];
+    draw();
     requestAnimationFrame(step);
   }
 

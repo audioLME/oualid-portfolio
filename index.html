@@ -111,7 +111,7 @@
       e.stopPropagation(); // Prevent grid flip
       
       const btn = e.currentTarget;
-      Site.wipeTo('profile.html', btn, { duration: 1 });
+      Site.cutTo('profile.html');
 
       // Fade out button
       gsap.to(btn, {

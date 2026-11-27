@@ -1694,11 +1694,44 @@ body.theme-dark {
   z-index: 2;
 }
 
-/* ---------- page transition (menu buttons and Continue) ---------- */
-.page-wipe {
+/* ---------- scissor-cut transition (home page) ---------- */
+.cut-layer {
   position: fixed;
-  z-index: 9999;
+  inset: 0;
+  z-index: 10000;
   pointer-events: none;
+  overflow: hidden;
+}
+
+.cut-under {
+  position: absolute;
+  inset: 0;
   background: var(--dark);
-  border: 1px solid rgba(238, 233, 228, 0.55);
+}
+
+.cut-half {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #eee9e4;
+  /* makes the cloned fixed elements position inside the half */
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.cut-half > div {
+  position: absolute;
+  inset: 0;
+}
+
+.cut-line {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.cut-line line {
+  stroke: #1f1e1d;
+  stroke-width: 1.5;
 }
