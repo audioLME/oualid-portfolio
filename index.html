@@ -111,42 +111,8 @@
       e.stopPropagation(); // Prevent grid flip
       
       const btn = e.currentTarget;
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        window.location.href = 'profile.html';
-        return;
-      }
-      const rect = btn.getBoundingClientRect();
-      
-      // Create fullscreen overlay
-      const overlay = document.createElement('div');
-      overlay.style.cssText = `
-        position: fixed;
-        left: ${rect.left}px;
-        top: ${rect.top}px;
-        width: ${rect.width}px;
-        height: ${rect.height}px;
-        background: #111;
-        border-radius: 4px;
-        z-index: 9999;
-        pointer-events: none;
-      `;
-      document.body.appendChild(overlay);
-      
-      // Animate expansion
-      gsap.to(overlay, {
-        left: 0,
-        top: 0,
-        width: '100vw',
-        height: '100vh',
-        borderRadius: 0,
-        duration: 1,
-        ease: 'power2.inOut',
-         onComplete: () => {
-           // Navigate to profile page or trigger next section
-           window.location.href = 'profile.html';
-        }
-      });
-      
+      Site.wipeTo('profile.html', btn, { duration: 1 });
+
       // Fade out button
       gsap.to(btn, {
         opacity: 0,

@@ -1,71 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="theme-dark">
 <head>
   <meta charset="UTF-8" />
   <title>Profile — Oualid Meghlaoui</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Profile of Oualid Meghlaoui — architect, designer and 3D artist." />
-  <meta name="theme-color" content="#111111" />
+  <meta name="theme-color" content="#1f1e1d" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23111'/%3E%3Ctext x='16' y='23' font-size='20' font-family='sans-serif' font-weight='900' text-anchor='middle' fill='%23eee9e4'%3EO%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@300;400;500;700;900&display=swap" />
   <link rel="stylesheet" href="styles.css" />
   <style>
-    body {
-      background: #111 !important;
-      color: #eee9e4 !important;
-    }
-
-    /* let the document scroll normally once the profile has real content */
-    html, body {
-      height: auto;
-      min-height: 100%;
-    }
-
-    .site-header {
-      background: #111 !important;
-    }
-    .logo,
-    .nav a,
-    .meta {
-      color: #eee9e4 !important;
-    }
-    .hourglass polygon {
-      fill: #eee9e4 !important;
-    }
-    #version-indicator {
-      color: #eee9e4 !important;
-    }
-    .site-header {
-      transform: translateY(-100px);
-    }
-    /* 3D scene: perspective lives on a fixed wrapper, not on <body data-page="profile"> */
-    #scene {
-      position: fixed;
-      inset: 0;
-      perspective: 1400px;
-      perspective-origin: 50% 38%;
-      pointer-events: none;
-      z-index: 0;
-    }
-    #grid-container {
-      position: absolute;
-      inset: 0;
-      transform-style: preserve-3d;
-    }
-    #grid-container .grid-plane {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      opacity: 0;
-    }
-    .about-content {
-      color: #eee9e4;
-    }
     .about-page {
-      position: relative;
-      z-index: 2;
       padding: 140px 48px 80px;
     }
     .about-content {
@@ -73,28 +20,6 @@
     }
     @media (max-width: 768px) {
       .about-page { padding: 190px 16px 64px; }
-      .site-header { transform: translateY(-220px); }
-    }
-    .nav a {
-      border: 1px solid rgba(238, 233, 228, 0.06);
-      padding: 8px 12px;
-      transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease;
-      cursor: pointer;
-    }
-    .nav a:hover,
-    .nav a[aria-current="page"] {
-      background-color: #eee9e4;
-      color: #111 !important;
-      border-color: #eee9e4;
-    }
-    .lang-switch,
-    .lang-switch button + button {
-      border-color: rgba(238, 233, 228, 0.2);
-    }
-    .lang-switch button:hover,
-    .lang-switch button[aria-pressed="true"] {
-      background: #eee9e4;
-      color: #111;
     }
     .about-content {
       max-width: 640px;
@@ -200,8 +125,6 @@
 </head>
 <body>
 
-  <!-- 3D Grid Space -->
-  <div id="scene" aria-hidden="true"><div id="grid-container"></div></div>
 
     <!-- Version Indicator -->
     <div id="version-indicator">v0.0.00</div>
@@ -265,23 +188,7 @@
   <script src="3Dshapes.js"></script>
   <script src="holograms.js"></script>
   <script>
-    init3DRoomGrid();
-
-    // Entry animation (no loading overlay)
-    const entryTl = gsap.timeline();
-    
-    entryTl
-      .fromTo('#grid-container', { z: -420 }, { z: 0, duration: 1.6, ease: 'power3.out' }, 0)
-      .to('.grid-plane.floor',      { opacity: 1, duration: 0.8, ease: 'power2.out' }, 0)
-      .to('.grid-plane.ceiling',    { opacity: 1, duration: 0.8, ease: 'power2.out' }, 0.12)
-      .to('.grid-plane.wall-left',  { opacity: 1, duration: 0.8, ease: 'power2.out' }, 0.24)
-      .to('.grid-plane.wall-right', { opacity: 1, duration: 0.8, ease: 'power2.out' }, 0.36)
-      .to('.grid-plane.wall-back',  { opacity: 1, duration: 0.8, ease: 'power2.out' }, 0.48)
-      .to('.site-header', { y: 0, duration: 1.8, ease: 'power2.out' }, 0.6)
-      .call(Site.startLogoFlip, null, 0.9)
-      .fromTo('.about-content', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }, 1.6)
-      .call(() => { if (typeof initHolograms === 'function') initHolograms(); }, null, 2.0);
-
+    Site.darkEntry();
   </script>
 </body>
 </html>

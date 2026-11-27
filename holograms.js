@@ -217,13 +217,13 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
-  // world coords: origin at viewport centre, +y down, +z toward the viewer
+  // Same camera as the room (3Dshapes.js). World origin = vanishing point.
   function project(x, y, z) {
+    if (window.Room3D) return Room3D.project(x, y, z);
     const den = CAMERA - z;
     if (den < 120) return null;
     const s = CAMERA / den;
-    const ox = vw / 2, oy = vh * ORIGIN_Y;
-    return [ox + (vw / 2 + x - ox) * s, oy + (vh / 2 + y - oy) * s, s];
+    return [vw / 2 + x * s, vh * ORIGIN_Y + y * s, s];
   }
 
   /* ---------- hologram lifecycle ---------- */
@@ -249,8 +249,10 @@
     const side = left === right ? (Math.random() < 0.5 ? -1 : 1) : (left < right ? -1 : 1);
     const xMax = Math.max(r, m.W / 2 - r * 1.8);
     const cx = side * clamp(rand(0.14, 0.34) * vw, r, xMax);
-    const cz = rand(-m.D / 2 * 0.55, Math.min(120, m.D / 2 - r * 1.8));
-    const floorY = m.H / 2;
+    const zNear = m.zF !== undefined ? m.zF * 0.35 : 120;
+    const zFar = m.zB !== undefined ? m.zB * 0.45 : -m.D / 2 * 0.55;
+    const cz = rand(zFar, zNear);
+    const floorY = m.floorY !== undefined ? m.floorY : m.H / 2;
     const cy = floorY - m.H * rand(0.30, 0.46);
 
     const shape = buildShape(name);
@@ -352,7 +354,7 @@
     const ringOut = 1 - clamp((t - h.tEraseStart - h.tErase * 0.5) / (h.tErase * 0.6), 0, 1);
     drawFloorRing(h, ringIn * ringOut);
 
-    if (now >= h.nextGlitch) {
+    if (!reduceMotion && now >= h.nextGlitch) {
       h.glitchUntil = now + rand(60, 140);
       h.glitchDx = rand(-5, 5);
       h.nextGlitch = now + rand(2500, 6000);
@@ -440,10 +442,10 @@
     raf = requestAnimationFrame(frame);
     ctx.clearRect(0, 0, vw, vh);
 
-    const maxHolos = vw < 700 ? 2 : 3;
+    const maxHolos = vw < 700 ? 1 : 3;
     if (holos.length < maxHolos && now >= nextSpawn) {
       spawn();
-      nextSpawn = now + rand(1400, 3400);
+      nextSpawn = now + rand(1200, 2600);
     }
     holos = holos.filter(h => drawHolo(h, now));
   }
@@ -451,7 +453,9 @@
   /* ---------- public API ---------- */
 
   function init() {
-    if (reduceMotion || running) return;
+    // Note: runs even with "reduce motion" on (slow, no glitches); turning it
+    // off entirely is why the shapes never showed on some computers.
+    if (running) return;
     running = true;
 
     cvs = document.createElement('canvas');
@@ -468,7 +472,7 @@
       nextSpawn = performance.now() + 600;
     });
 
-    nextSpawn = performance.now() + 300;
+    nextSpawn = performance.now();
     raf = requestAnimationFrame(frame);
   }
 

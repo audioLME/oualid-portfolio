@@ -204,7 +204,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: #111;
+  background: #1f1e1d;
   z-index: 9999;
 }
 
@@ -1514,4 +1514,191 @@ html[lang="fr"] .hero-text h2 {
     font-size: 17px;
     line-height: 1.15;
   }
+}
+
+
+/* =========================================================
+   DARK THEME (profile, portfolio, project, contact)
+   Used with the 3D room canvas (3Dshapes.js) and holograms.
+   ========================================================= */
+:root {
+  --dark: #1f1e1d;
+  --cream: #eee9e4;
+  --cream-line: rgba(238, 233, 228, 0.18);
+}
+
+html.theme-dark,
+html.theme-dark body {
+  height: auto;
+  min-height: 100%;
+}
+
+.theme-dark body,
+body.theme-dark {
+  background: var(--dark);
+  color: var(--cream);
+}
+
+.theme-dark .site-header {
+  background: var(--dark);
+}
+
+.theme-dark .logo,
+.theme-dark .nav a,
+.theme-dark .meta,
+.theme-dark .lang-switch button {
+  color: var(--cream);
+}
+
+.theme-dark .nav a {
+  border-color: var(--cream-line);
+}
+
+.theme-dark .nav a:hover,
+.theme-dark .nav a[aria-current="page"] {
+  background: var(--cream);
+  color: var(--dark);
+  border-color: var(--cream);
+}
+
+.theme-dark .lang-switch,
+.theme-dark .lang-switch button + button {
+  border-color: var(--cream-line);
+}
+
+.theme-dark .lang-switch button:hover,
+.theme-dark .lang-switch button[aria-pressed="true"] {
+  background: var(--cream);
+  color: var(--dark);
+}
+
+.theme-dark #version-indicator {
+  background: rgba(238, 233, 228, 0.08);
+  color: var(--cream);
+}
+
+.theme-dark .page,
+.theme-dark .site-footer {
+  color: var(--cream);
+}
+
+.theme-dark .site-footer {
+  border-top-color: var(--cream-line);
+}
+
+.theme-dark .card,
+.theme-dark .facts,
+.theme-dark .panel {
+  background: rgba(31, 30, 29, 0.82);
+  border-color: var(--cream-line);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.theme-dark .card {
+  color: var(--cream);
+}
+
+.theme-dark .card:hover {
+  border-color: var(--cream);
+}
+
+.theme-dark .card .frame img {
+  filter: grayscale(1) brightness(0.85) contrast(1.05);
+}
+
+.theme-dark .card:hover .frame img {
+  filter: none;
+}
+
+.theme-dark .card-cta,
+.theme-dark .socials li + li {
+  border-color: var(--cream-line);
+}
+
+.theme-dark .facts div + div,
+.theme-dark .facts div:nth-child(n + 3) {
+  border-color: var(--cream-line);
+}
+
+.theme-dark .frame {
+  background:
+    linear-gradient(rgba(238, 233, 228, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(238, 233, 228, 0.07) 1px, transparent 1px),
+    #2a2927;
+  background-size: 40px 40px;
+}
+
+.theme-dark .frame .frame-label {
+  color: rgba(238, 233, 228, 0.45);
+}
+
+.theme-dark .project-cover,
+.theme-dark .gallery button {
+  border-color: var(--cream-line);
+}
+
+.theme-dark .room {
+  border-top-color: var(--cream-line);
+}
+
+.theme-dark .room-text,
+.theme-dark .project-lead {
+  text-shadow: 0 1px 12px rgba(31, 30, 29, 0.9);
+}
+
+.theme-dark .back-link,
+.theme-dark .next-project,
+.theme-dark .email-big,
+.theme-dark .socials a {
+  color: var(--cream);
+}
+
+.theme-dark .back-link:hover {
+  border-bottom-color: var(--cream);
+}
+
+.theme-dark .next-project {
+  border-top-color: var(--cream);
+}
+
+.theme-dark .btn {
+  color: var(--cream);
+  background: rgba(31, 30, 29, 0.7);
+  border-color: rgba(238, 233, 228, 0.3);
+}
+
+.theme-dark .btn:hover {
+  background: var(--cream);
+  color: var(--dark);
+  border-color: var(--cream);
+}
+
+.theme-dark .btn:focus-visible,
+.theme-dark .card:focus-visible,
+.theme-dark .back-link:focus-visible,
+.theme-dark .next-project:focus-visible,
+.theme-dark .gallery button:focus-visible {
+  outline-color: var(--cream);
+}
+
+.theme-dark .lightbox {
+  background: rgba(20, 19, 18, 0.96);
+}
+
+/* content sits above the room (z 0) and the holograms (z 1) */
+.theme-dark .page,
+.theme-dark .site-footer,
+.theme-dark .about-page {
+  position: relative;
+  z-index: 2;
+}
+
+/* ---------- page transition (menu buttons and Continue) ---------- */
+.page-wipe {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  background: var(--dark);
+  border: 1px solid rgba(238, 233, 228, 0.55);
 }

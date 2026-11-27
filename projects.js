@@ -254,7 +254,7 @@
 
     const items = root.querySelectorAll('.reveal');
     if (firstRender && !reduceMotion && typeof gsap !== 'undefined') {
-      gsap.fromTo(items, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.08, ease: 'power2.out', delay: 0.15 });
+      gsap.fromTo(items, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.08, ease: 'power2.out', delay: 0.5 });
     } else {
       items.forEach(el => { el.style.opacity = 1; });
     }

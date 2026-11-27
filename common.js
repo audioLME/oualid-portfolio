@@ -126,7 +126,71 @@
     document.addEventListener('touchend', flip);
   }
 
-  window.Site = { updateTime, updateVersion, startLogoFlip, initGridHighlight };
+  /* ---------- page transition ---------- */
+  // A box grows from the clicked button to fill the screen, then the next
+  // page loads underneath it (same effect as the Continue button).
+  const reduce = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let leaving = false;
+
+  function wipeTo(href, fromEl, opts = {}) {
+    if (leaving) return;
+    if (reduce() || typeof gsap === 'undefined' || !fromEl) { location.href = href; return; }
+    leaving = true;
+    const r = fromEl.getBoundingClientRect();
+    const box = document.createElement('div');
+    box.className = 'page-wipe';
+    box.style.left = r.left + 'px';
+    box.style.top = r.top + 'px';
+    box.style.width = r.width + 'px';
+    box.style.height = r.height + 'px';
+    document.body.appendChild(box);
+    gsap.to(box, {
+      left: 0, top: 0, width: '100vw', height: '100vh',
+      borderColor: 'rgba(238,233,228,0)',
+      duration: opts.duration || 0.9,
+      ease: 'power2.inOut',
+      onComplete: () => { location.href = href; }
+    });
+  }
+
+  function initNavTransitions() {
+    document.querySelectorAll('.nav a, [data-wipe]').forEach(a => {
+      a.addEventListener('click', e => {
+        if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        if (a.getAttribute('aria-current') === 'page') { e.preventDefault(); return; }
+        e.preventDefault();
+        e.stopPropagation(); // no grid-cell flip
+        wipeTo(a.href, a);
+      });
+    });
+    // Coming back with the browser's Back button: remove a finished wipe
+    window.addEventListener('pageshow', e => {
+      if (!e.persisted) return;
+      leaving = false;
+      document.querySelectorAll('.page-wipe').forEach(el => el.remove());
+    });
+  }
+
+  /* ---------- dark pages: room intro, header, holograms ---------- */
+  function darkEntry() {
+    if (window.Room3D) Room3D.init();
+    const startHolos = () => { if (typeof initHolograms === 'function') initHolograms(); };
+    if (typeof gsap === 'undefined' || reduce()) {
+      document.querySelectorAll('.about-content').forEach(el => { el.style.opacity = 1; });
+      startHolos();
+      return;
+    }
+    const tl = gsap.timeline()
+      .fromTo('.site-header', { yPercent: -100 }, { yPercent: 0, duration: 1.2, ease: 'power2.out' }, 0.3)
+      .call(startLogoFlip, null, 0.9)
+      .call(startHolos, null, 0.7);
+    if (document.querySelector('.about-content')) {
+      tl.fromTo('.about-content', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }, 1.0);
+    }
+  }
+
+  window.Site = { updateTime, updateVersion, startLogoFlip, initGridHighlight, wipeTo, darkEntry };
+  initNavTransitions();
 
   markActiveNav();
   updateTime();
