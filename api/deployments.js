@@ -4,7 +4,7 @@ export default async function handler(req, res) {
     const projectId = 'prj_LgmzCBN6ozGtBH5oB3npJtctybES';
 
     if (!token) {
-      return res.status(500).json({ version: 'no token', error: 'PORTFOLIO_TOKEN not set' });
+      return res.status(500).json({ error: 'PORTFOLIO_TOKEN not set' });
     }
 
     const response = await fetch(
@@ -17,7 +17,6 @@ export default async function handler(req, res) {
     );
 
     const data = await response.json();
-    console.log('API Response:', data);
     
     const lastDeployment = data.deployments?.[0];
     
@@ -36,12 +35,13 @@ export default async function handler(req, res) {
       else if (diffHours < 24) timeAgo = `${diffHours}h ago`;
       else timeAgo = `${diffDays}d ago`;
       
+      res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=300');
       res.status(200).json({ version: timeAgo });
     } else {
-      res.status(200).json({ version: 'never', debug: data });
+      res.status(404).json({ error: 'no ready deployment found' });
     }
   } catch (error) {
     console.error('Deployment fetch error:', error);
-    res.status(500).json({ version: 'error', error: error.message });
+    res.status(500).json({ error: 'deployment lookup failed' });
   }
 }

@@ -1,4 +1,4 @@
-﻿const words = [
+const words = [
   "OUALID",
   "ARCHITECT",
   "DESIGNER",
