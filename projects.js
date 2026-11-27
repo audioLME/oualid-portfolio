@@ -261,12 +261,14 @@
     firstRender = false;
   }
 
-  fetch('data/projects.json', { cache: 'no-cache' })
-    .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
-    .then(json => { data = json; render(); })
+  const load = fetch('data/projects.json', { cache: 'no-cache' })
+    .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
+  Promise.all([load, window.Site ? Site.ready : null])
+    .then(([json]) => { data = json; render(); })
     .catch(() => {
       root.innerHTML = '<p class="page-intro">Could not load data/projects.json.</p>';
-    });
+    })
+    .finally(() => { if (window.Site) Site.showPage(); });
 
   window.addEventListener('langchange', () => { if (data) render(); });
 })();

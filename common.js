@@ -235,11 +235,12 @@
     const startHolos = () => { if (typeof initHolograms === 'function') initHolograms(); };
     if (typeof gsap === 'undefined' || reduce()) {
       document.querySelectorAll('.about-content').forEach(el => { el.style.opacity = 1; });
+      document.querySelectorAll('.site-header').forEach(el => { el.style.transform = 'none'; });
       startHolos();
       return;
     }
     const tl = gsap.timeline()
-      .fromTo('.site-header', { yPercent: -100 }, { yPercent: 0, duration: 0.8, ease: 'power2.out' }, 1.2)
+      .fromTo('.site-header', { y: 0, yPercent: -100 }, { yPercent: 0, duration: 0.8, ease: 'power2.out' }, 1.2)
       .call(startLogoFlip, null, 1.6)
       .call(startHolos, null, 2.0);
     if (document.querySelector('.about-content')) {
@@ -247,7 +248,18 @@
     }
   }
 
-  window.Site = { updateTime, updateVersion, startLogoFlip, initGridHighlight, cutTo, fadeTo, goTo, darkEntry };
+  /* ---------- ready: fonts loaded (or 1.5 s at most) ---------- */
+  // Animations wait for this so nothing jumps when the real font arrives.
+  const ready = Promise.race([
+    document.fonts ? document.fonts.ready : Promise.resolve(),
+    new Promise(r => setTimeout(r, 1500))
+  ]);
+  function showPage() { document.documentElement.classList.remove('is-loading'); }
+  // pages that fill their content from data call showPage() themselves
+  if (!document.getElementById('page-root')) ready.then(showPage);
+  setTimeout(showPage, 3000); // safety net
+
+  window.Site = { ready, showPage, updateTime, updateVersion, startLogoFlip, initGridHighlight, cutTo, fadeTo, goTo, darkEntry };
   initNavTransitions();
 
   markActiveNav();
