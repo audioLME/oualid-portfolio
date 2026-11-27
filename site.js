@@ -4,7 +4,7 @@
   const menuButton = document.querySelector(".menu-toggle");
   const navigation = document.getElementById("site-nav");
 
-  const updateTime = () => {
+  function updateTime() {
     if (!time) return;
     time.textContent = new Intl.DateTimeFormat("en-GB", {
       timeZone: "Africa/Algiers",
@@ -12,7 +12,7 @@
       minute: "2-digit",
       hour12: false
     }).format(new Date());
-  };
+  }
 
   updateTime();
   window.setInterval(updateTime, 60000);
@@ -26,13 +26,16 @@
     };
 
     menuButton.addEventListener("click", () => {
-      const open = menuButton.getAttribute("aria-expanded") === "true";
-      menuButton.setAttribute("aria-expanded", String(!open));
-      menuButton.setAttribute("aria-label", open ? "Open navigation" : "Close navigation");
-      navigation.classList.toggle("is-open", !open);
+      const isOpen = menuButton.getAttribute("aria-expanded") === "true";
+      menuButton.setAttribute("aria-expanded", String(!isOpen));
+      menuButton.setAttribute("aria-label", isOpen ? "Open navigation" : "Close navigation");
+      navigation.classList.toggle("is-open", !isOpen);
     });
 
-    navigation.querySelectorAll("a").forEach(link => link.addEventListener("click", closeMenu));
+    navigation.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", closeMenu);
+    });
+
     window.addEventListener("resize", () => {
       if (window.innerWidth > 760) closeMenu();
     });
