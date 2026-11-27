@@ -138,6 +138,7 @@
     if (leaving) return;
     if (reduce() || typeof gsap === 'undefined') { location.href = href; return; }
     leaving = true;
+    lock();
 
     const vw = window.innerWidth, vh = window.innerHeight;
     const off = Math.tan(CUT_ANGLE) * vh / 2;
@@ -198,6 +199,7 @@
     if (leaving) return;
     if (reduce() || typeof gsap === 'undefined') { location.href = href; return; }
     leaving = true;
+    lock();
     gsap.to('.page, .about-page, .site-footer, #room-canvas, #hologram-canvas', {
       opacity: 0, duration: 0.4, ease: 'power1.in',
       onComplete: () => { location.href = href; }
@@ -223,6 +225,7 @@
     window.addEventListener('pageshow', e => {
       if (!e.persisted) return;
       leaving = false;
+      unlock();
       document.querySelectorAll('.cut-layer').forEach(el => el.remove());
       document.querySelectorAll('.page, .about-page, .site-footer, #room-canvas, #hologram-canvas')
         .forEach(el => { el.style.opacity = ''; });
@@ -236,13 +239,15 @@
     if (typeof gsap === 'undefined' || reduce()) {
       document.querySelectorAll('.about-content').forEach(el => { el.style.opacity = 1; });
       document.querySelectorAll('.site-header').forEach(el => { el.style.transform = 'none'; });
+      unlock();
       startHolos();
       return;
     }
     const tl = gsap.timeline()
       .fromTo('.site-header', { y: 0, yPercent: -100 }, { yPercent: 0, duration: 0.8, ease: 'power2.out' }, 1.2)
       .call(startLogoFlip, null, 1.6)
-      .call(startHolos, null, 2.0);
+      .call(startHolos, null, 2.0)
+      .call(unlock, null, 2.2);
     if (document.querySelector('.about-content')) {
       tl.fromTo('.about-content', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }, 1.4);
     }
@@ -259,7 +264,13 @@
   if (!document.getElementById('page-root')) ready.then(showPage);
   setTimeout(showPage, 3000); // safety net
 
-  window.Site = { ready, showPage, updateTime, updateVersion, startLogoFlip, initGridHighlight, cutTo, fadeTo, goTo, darkEntry };
+  // Links and buttons can't be clicked until they have appeared, or while
+  // the page is leaving (class set in each page's <head>).
+  function lock() { document.documentElement.classList.add('intro-lock'); }
+  function unlock() { document.documentElement.classList.remove('intro-lock'); }
+  setTimeout(unlock, 7000); // safety net
+
+  window.Site = { ready, showPage, lock, unlock, updateTime, updateVersion, startLogoFlip, initGridHighlight, cutTo, fadeTo, goTo, darkEntry };
   initNavTransitions();
 
   markActiveNav();

@@ -1730,3 +1730,14 @@ body.theme-dark {
 .is-loading .hero {
   visibility: hidden;
 }
+
+/* nothing is clickable before it has appeared (see common.js lock/unlock) */
+.intro-lock a,
+.intro-lock button {
+  pointer-events: none;
+}
+
+/* Continue fades in last: clickable only once it is fully shown */
+.continue-btn:not(.is-ready) {
+  pointer-events: none;
+}

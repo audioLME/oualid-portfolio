@@ -11,7 +11,7 @@
   <meta property="og:description" content="Portfolio of Oualid Meghlaoui — architect, designer and 3D artist based in Algeria." />
   <meta name="twitter:card" content="summary" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23111'/%3E%3Ctext x='16' y='23' font-size='20' font-family='sans-serif' font-weight='900' text-anchor='middle' fill='%23eee9e4'%3EO%3C/text%3E%3C/svg%3E" />
-  <script>document.documentElement.classList.add('is-loading');</script>
+  <script>document.documentElement.classList.add('is-loading', 'intro-lock');</script>
   <link rel="preload" href="fonts/konnect/KonnectBlack.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="fonts/konnect/KonnectBold.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="fonts/konnect/KonnectMedium.woff2" as="font" type="font/woff2" crossorigin />
@@ -21,7 +21,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@300;400;500;700;900&display=swap" />
-  <link rel="stylesheet" href="styles.css?v=202611272256" />
+  <link rel="stylesheet" href="styles.css?v=202611272305" />
 </head>
 <body data-page="home">
 
@@ -73,10 +73,10 @@
 
   <!-- GSAP -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-  <script src="i18n.js?v=202611272256"></script>
-  <script src="common.js?v=202611272256"></script>
-  <script src="hero.js?v=202611272256"></script>
-  <script src="shapes.js?v=202611272256"></script>
+  <script src="i18n.js?v=202611272305"></script>
+  <script src="common.js?v=202611272305"></script>
+  <script src="hero.js?v=202611272305"></script>
+  <script src="shapes.js?v=202611272305"></script>
   <script>
     // Entry animation
     // Wait for the fonts so the letters are measured and placed only once
@@ -88,6 +88,7 @@
       .fromTo('.logo', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 })
       .fromTo('.nav a', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.2 }, '-=0.3')
       .fromTo('.header-end > *', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.15 }, '-=0.25')
+      .call(Site.unlock) // menu buttons are visible: clickable from now on
       .call(Site.startLogoFlip)
       .to('#animation-box', { opacity: 1, duration: 0.5 }, '+=0.2')
       .fromTo('.letter', { y: 300, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, stagger: 0.08, ease: 'power4.out' })
@@ -105,7 +106,8 @@
           animateHeroText();
         }
       }, null, '+=0.5')
-      .to('.continue-btn', { opacity: 1, duration: 0.8, ease: 'power2.out' }, '+=4')
+      .to('.continue-btn', { opacity: 1, duration: 0.8, ease: 'power2.out',
+        onComplete: () => document.getElementById('continue-arrow').classList.add('is-ready') }, '+=4')
       .call(() => {
         // Start cycling after OUALID has been shown for 2.5s
         if (typeof startCycle === 'function') {
