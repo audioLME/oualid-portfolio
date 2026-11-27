@@ -56,7 +56,6 @@
   /* ---------- logo letters flip loop ---------- */
   function startLogoFlip() {
     if (typeof gsap === 'undefined') return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     gsap.timeline({ repeat: -1 })
       .to('.logo span', { rotationY: 180, duration: 0.5, stagger: 0.1 }, 0)
       .to('.logo span', { rotationY: 0, duration: 0.5, stagger: 0.1 }, 0.5)
@@ -127,7 +126,9 @@
   }
 
   /* ---------- page transitions ---------- */
-  const reduce = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // The animations are part of the design, so they also play when the
+  // computer asks for reduced motion (Windows turns this on often).
+  const reduce = () => false;
   const CUT_ANGLE = 17 * Math.PI / 180; // tilt of the scissor cut from vertical
   let leaving = false;
 

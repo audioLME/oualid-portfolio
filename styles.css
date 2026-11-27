@@ -666,14 +666,6 @@ body {
   outline-offset: 4px;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .hourglass,
-  .continue-btn,
-  .hero-letter,
-  .hero-text:hover .hero-letter {
-    animation: none !important;
-  }
-}
 
 
 /* =========================================================
@@ -1493,16 +1485,6 @@ html[dir="rtl"] .email-big {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .card,
-  .frame img,
-  .socials a {
-    transition: none;
-  }
-  .card:hover {
-    transform: none;
-  }
-}
 
 /* The French quote is longer: keep it clear of the Continue button */
 html[lang="fr"] .hero-text h2 {

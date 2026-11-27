@@ -162,8 +162,6 @@
   // floor rises from the bottom, then the ceiling drops from the top; the
   // back wall fades in last.
   function intro() {
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduce) { push = 0; planeAlpha = [1, 1, 1, 1, 1]; planeShift = [0, 0, 0, 0]; draw(); return; }
     const plan = {          // [start, duration] in seconds
       left: [0, 1.1], right: [0, 1.1],
       floor: [0.3, 0.9], ceil: [0.5, 0.9],
