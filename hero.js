@@ -1,9 +1,5 @@
-const words = [
-  "OUALID",
-  "ARCHITECT",
-  "DESIGNER",
-  "3D ARTIST"
-];
+// Words come from i18n.js so they follow the language switch
+let words = window.I18N ? I18N.t('hero.words').slice() : ["OUALID", "ARCHITECT", "DESIGNER", "3D ARTIST"];
 
 const container = document.getElementById("animation-box");
 const subtitleContainer = document.getElementById("subtitle-box");
@@ -148,7 +144,7 @@ function cycle() {
   const continueBtn = document.getElementById('continue-arrow');
   
   // Show subtitle only for OUALID
-  if (words[wordIndex] === "OUALID") {
+  if (wordIndex === 0) {
     gsap.delayedCall(0.9, showSubtitle);
   }
   
@@ -161,7 +157,7 @@ function cycle() {
     })];
     
     // Hide subtitle if it's OUALID
-    if (words[wordIndex] === "OUALID") {
+    if (wordIndex === 0) {
       hideSubtitle(() => {
         hideWord(() => {
           wordIndex = (wordIndex + 1) % words.length;
@@ -200,59 +196,60 @@ words[0].split("").forEach((char) => {
 positionLetters();
 gsap.set(".letter", { y: 300, opacity: 0 });
 
-function animateHeroText() {
+let heroTextShown = false;
+
+// Builds the quote under the name. Latin text is revealed letter by letter;
+// Arabic is revealed word by word (splitting Arabic letters breaks how they join).
+function renderHeroText(animate) {
   const heroHeading = document.getElementById('hero-heading');
   if (!heroHeading) return;
-  
-  // Store the original text structure
-  const lines = [
-    "I wander through ideas until one refuses to let me go, when curiosity becomes obsession, depth follows — and so does my best work."
-  ];
-  
+  const rtl = window.I18N && I18N.lang === 'ar';
+  const quote = window.I18N ? I18N.t('hero.quote') : heroHeading.textContent;
+  const hidden = rtl ? 'inset(0 0 0 100%)' : 'inset(0 100% 0 0)';
+
   heroHeading.innerHTML = '';
-  
-  lines.forEach((line, lineIdx) => {
-    const lineSpan = document.createElement('div');
-    lineSpan.style.display = 'block';
-    
-    // Split by words first to keep them together
-    const words = line.split(' ');
-    
-    let letterIndex = 0;
-    words.forEach((word) => {
-      const wordSpan = document.createElement('span');
-      wordSpan.style.display = 'inline-block';
-      wordSpan.style.marginRight = '0.3em';
-      
-      // Then split word into letters
-      word.split('').forEach((char) => {
-        const letterSpan = document.createElement('span');
-        letterSpan.className = 'hero-letter';
-        letterSpan.textContent = char;
-        letterSpan.style.display = 'inline-block';
-        letterSpan.style.clipPath = 'inset(0 100% 0 0)';
-        letterSpan.style.setProperty('--letter-index', letterIndex);
-        letterIndex++;
-        wordSpan.appendChild(letterSpan);
-      });
-      
-      lineSpan.appendChild(wordSpan);
+  heroHeading.setAttribute('aria-label', quote);
+  const lineSpan = document.createElement('div');
+  lineSpan.style.display = 'block';
+  lineSpan.setAttribute('aria-hidden', 'true');
+
+  let letterIndex = 0;
+  quote.split(' ').forEach((word) => {
+    const wordSpan = document.createElement('span');
+    wordSpan.className = 'hero-word-wrap';
+    const units = rtl ? [word] : word.split('');
+    units.forEach((char) => {
+      const letterSpan = document.createElement('span');
+      letterSpan.className = 'hero-letter';
+      letterSpan.textContent = char;
+      letterSpan.style.clipPath = animate ? hidden : 'none';
+      letterSpan.style.setProperty('--letter-index', letterIndex++);
+      wordSpan.appendChild(letterSpan);
     });
-    
-    heroHeading.appendChild(lineSpan);
-    if (lineIdx < lines.length - 1) {
-      heroHeading.appendChild(document.createElement('br'));
-    }
+    lineSpan.appendChild(wordSpan);
   });
-  
-  // Animate all hero letters to expand (reveal effect like drawing)
-  gsap.to('.hero-letter', {
-    clipPath: 'inset(0 0% 0 0)',
-    duration: 0.2,
-    stagger: 0.06,
-    ease: 'power1.out'
-  });
+  heroHeading.appendChild(lineSpan);
+
+  if (animate) {
+    gsap.to('.hero-letter', {
+      clipPath: 'inset(0 0% 0 0%)',
+      duration: rtl ? 0.35 : 0.2,
+      stagger: rtl ? 0.12 : 0.06,
+      ease: 'power1.out'
+    });
+  }
 }
+
+function animateHeroText() {
+  heroTextShown = true;
+  renderHeroText(true);
+}
+
+// Language switch: swap the words for the next cycle and redraw the quote
+window.addEventListener('langchange', () => {
+  words = I18N.t('hero.words').slice();
+  if (heroTextShown) renderHeroText(false);
+});
 
 // Recalculate positions on window resize
 window.addEventListener('resize', () => {

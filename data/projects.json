@@ -1,0 +1,364 @@
+{
+  "_help": "Edit this file to change the projects and contact details. Each text has an English (en), French (fr) and Arabic (ar) version. Images can be a full https link or a path inside the repository such as images/my-project/kitchen.jpg.",
+  "contact": {
+    "email": "hello@your-domain.com",
+    "socials": [
+      {
+        "name": "Instagram",
+        "handle": "@your.handle",
+        "url": "https://instagram.com/"
+      },
+      {
+        "name": "LinkedIn",
+        "handle": "/in/your-name",
+        "url": "https://www.linkedin.com/"
+      },
+      {
+        "name": "Behance",
+        "handle": "/your-name",
+        "url": "https://www.behance.net/"
+      }
+    ]
+  },
+  "projects": [
+    {
+      "id": "office",
+      "year": "2025",
+      "area": "420 m²",
+      "type": {
+        "en": "Workplace",
+        "fr": "Bureaux",
+        "ar": "مكاتب"
+      },
+      "status": {
+        "en": "Concept",
+        "fr": "Concept",
+        "ar": "تصور"
+      },
+      "title": {
+        "en": "Atelier Office",
+        "fr": "Bureaux Atelier",
+        "ar": "مكاتب أتيلييه"
+      },
+      "summary": {
+        "en": "A bright, open office for a team of thirty.",
+        "fr": "Des bureaux ouverts et lumineux pour une équipe de trente personnes.",
+        "ar": "مكتب مفتوح ومضيء لفريق من ثلاثين شخصًا."
+      },
+      "description": {
+        "en": "The brief was simple: one floor, thirty people, and no one stuck in a dark corner. Desks follow the windows, the meeting rooms sit in the middle of the plan behind glass, and a lounge by the entrance doubles as a place to meet clients. Oak, white walls and plants keep the space calm through the working day.",
+        "fr": "Le brief était simple : un plateau, trente personnes, et personne coincé dans un coin sombre. Les postes suivent les fenêtres, les salles de réunion occupent le centre du plan derrière des cloisons vitrées, et un salon à l'entrée sert aussi à recevoir les clients. Chêne, murs blancs et plantes gardent l'espace calme toute la journée.",
+        "ar": "كان المطلوب بسيطًا: طابق واحد، ثلاثون شخصًا، ولا أحد عالق في زاوية مظلمة. تتبع المكاتب النوافذ، وتتوسط قاعات الاجتماعات المخطط خلف جدران زجاجية، وتتحول صالة المدخل إلى مكان لاستقبال العملاء. الخشب والجدران البيضاء والنباتات تمنح المكان هدوءًا طوال يوم العمل."
+      },
+      "cover": "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=80",
+      "sections": [
+        {
+          "title": {
+            "en": "Open workspace",
+            "fr": "Plateau ouvert",
+            "ar": "فضاء العمل المفتوح"
+          },
+          "text": {
+            "en": "Long shared desks along the façade, so every seat gets daylight and a view.",
+            "fr": "De longs bureaux partagés le long de la façade : chaque place a la lumière du jour et une vue.",
+            "ar": "مكاتب طويلة مشتركة على امتداد الواجهة، ليحظى كل مقعد بضوء النهار وإطلالة."
+          },
+          "images": [
+            {
+              "src": "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1600&q=80",
+              "caption": {
+                "en": "Desks along the windows",
+                "fr": "Postes le long des fenêtres",
+                "ar": "مكاتب بمحاذاة النوافذ"
+              }
+            },
+            {
+              "src": "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1600&q=80",
+              "caption": {
+                "en": "Shared work tables",
+                "fr": "Tables de travail partagées",
+                "ar": "طاولات عمل مشتركة"
+              }
+            },
+            {
+              "src": "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1600&q=80",
+              "caption": {
+                "en": "Plants as soft partitions",
+                "fr": "Les plantes comme cloisons douces",
+                "ar": "النباتات كفواصل ناعمة"
+              }
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Meeting rooms",
+            "fr": "Salles de réunion",
+            "ar": "قاعات الاجتماعات"
+          },
+          "text": {
+            "en": "Glass rooms in the core of the plan: private for sound, open for light.",
+            "fr": "Des salles vitrées au cœur du plan : isolées pour le son, ouvertes à la lumière.",
+            "ar": "قاعات زجاجية في قلب المخطط: معزولة صوتيًا، مفتوحة للضوء."
+          },
+          "images": [
+            {
+              "src": "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1600&q=80",
+              "caption": {
+                "en": "Main meeting room",
+                "fr": "Salle de réunion principale",
+                "ar": "قاعة الاجتماعات الرئيسية"
+              }
+            },
+            {
+              "src": "https://images.unsplash.com/photo-1517502884422-41eaead166d4?auto=format&fit=crop&w=1600&q=80",
+              "caption": {
+                "en": "Boardroom",
+                "fr": "Salle du conseil",
+                "ar": "قاعة المجلس"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "apartment",
+      "year": "2024",
+      "area": "110 m²",
+      "type": {
+        "en": "Apartment",
+        "fr": "Appartement",
+        "ar": "شقة"
+      },
+      "status": {
+        "en": "Completed",
+        "fr": "Livré",
+        "ar": "منجز"
+      },
+      "title": {
+        "en": "Light Apartment",
+        "fr": "Appartement Lumière",
+        "ar": "شقة النور"
+      },
+      "summary": {
+        "en": "A family flat redesigned room by room around daylight.",
+        "fr": "Un appartement familial repensé pièce par pièce autour de la lumière.",
+        "ar": "شقة عائلية أُعيد تصميمها غرفة بغرفة حول ضوء النهار."
+      },
+      "description": {
+        "en": "An old three-bedroom flat with small, closed rooms. We opened the kitchen onto the living room, moved storage into the walls and kept a short palette of materials: light oak, white plaster, warm linen and a little brass. Each room has one job and does it well.",
+        "fr": "Un ancien trois-pièces aux petites pièces fermées. La cuisine s'ouvre désormais sur le séjour, les rangements sont intégrés aux murs et la palette reste courte : chêne clair, plâtre blanc, lin chaud et une touche de laiton. Chaque pièce a une fonction et la remplit bien.",
+        "ar": "شقة قديمة بثلاث غرف صغيرة ومغلقة. فتحنا المطبخ على غرفة المعيشة، وأدمجنا التخزين في الجدران، واكتفينا بمواد قليلة: خشب البلوط الفاتح، الجص الأبيض، الكتان الدافئ ولمسة من النحاس. لكل غرفة وظيفة واحدة تؤديها جيدًا."
+      },
+      "cover": "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1600&q=80",
+      "sections": [
+        {
+          "title": {
+            "en": "Living room",
+            "fr": "Séjour",
+            "ar": "غرفة المعيشة"
+          },
+          "text": {
+            "en": "The heart of the flat: one long sofa, low shelves and nothing between you and the window.",
+            "fr": "Le cœur de l'appartement : un long canapé, des étagères basses et rien entre vous et la fenêtre.",
+            "ar": "قلب الشقة: أريكة طويلة، رفوف منخفضة ولا شيء بينك وبين النافذة."
+          },
+          "images": [
+            {
+              "src": "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=1600&q=80",
+              "caption": {
+                "en": "Living room",
+                "fr": "Séjour",
+                "ar": "غرفة المعيشة"
+              }
+            },
+            {
+              "src": "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=1600&q=80",
+              "caption": {
+                "en": "Reading corner",
+                "fr": "Coin lecture",
+                "ar": "ركن القراءة"
+              }
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Kitchen",
+            "fr": "Cuisine",
+            "ar": "المطبخ"
+          },
+          "text": {
+            "en": "Open to the living room, with a central island for cooking and eating together.",
+            "fr": "Ouverte sur le séjour, avec un îlot central pour cuisiner et manger ensemble.",
+            "ar": "مفتوح على غرفة المعيشة، مع جزيرة وسطية للطبخ والأكل معًا."
+          },
+          "images": [
+            {
+              "src": "https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=1600&q=80",
+              "caption": {
+                "en": "Kitchen island",
+                "fr": "Îlot central",
+                "ar": "الجزيرة الوسطية"
+              }
+            },
+            {
+              "src": "https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=1600&q=80",
+              "caption": {
+                "en": "Worktop and storage",
+                "fr": "Plan de travail et rangements",
+                "ar": "سطح العمل والتخزين"
+              }
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Bedroom",
+            "fr": "Chambre",
+            "ar": "غرفة النوم"
+          },
+          "text": {
+            "en": "Soft textiles, built-in wardrobes and blackout curtains: a room made for rest.",
+            "fr": "Textiles doux, placards intégrés et rideaux occultants : une pièce faite pour le repos.",
+            "ar": "أقمشة ناعمة وخزائن مدمجة وستائر معتمة: غرفة مصممة للراحة."
+          },
+          "images": [
+            {
+              "src": "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=1600&q=80",
+              "caption": {
+                "en": "Main bedroom",
+                "fr": "Chambre principale",
+                "ar": "غرفة النوم الرئيسية"
+              }
+            },
+            {
+              "src": "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=1600&q=80",
+              "caption": {
+                "en": "Bed and linen",
+                "fr": "Lit et linge",
+                "ar": "السرير والمفروشات"
+              }
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Bathroom",
+            "fr": "Salle de bain",
+            "ar": "الحمام"
+          },
+          "text": {
+            "en": "Stone, light wood and a walk-in shower in a compact footprint.",
+            "fr": "Pierre, bois clair et douche à l'italienne dans une surface compacte.",
+            "ar": "حجر وخشب فاتح ودش مفتوح في مساحة صغيرة."
+          },
+          "images": [
+            {
+              "src": "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&w=1600&q=80",
+              "caption": {
+                "en": "Bathroom",
+                "fr": "Salle de bain",
+                "ar": "الحمام"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "landscape",
+      "year": "2025",
+      "area": "1 800 m²",
+      "type": {
+        "en": "Landscape",
+        "fr": "Paysage",
+        "ar": "تنسيق خارجي"
+      },
+      "status": {
+        "en": "In progress",
+        "fr": "En cours",
+        "ar": "قيد الإنجاز"
+      },
+      "title": {
+        "en": "Garden House",
+        "fr": "Jardin de la Maison",
+        "ar": "حديقة البيت"
+      },
+      "summary": {
+        "en": "A dry garden, a terrace and a pool around a family house.",
+        "fr": "Un jardin sec, une terrasse et une piscine autour d'une maison familiale.",
+        "ar": "حديقة جافة وشرفة ومسبح حول منزل عائلي."
+      },
+      "description": {
+        "en": "The garden is designed to live with little water. Native and Mediterranean plants are grouped by need, paths of local stone link the house to the terrace and the pool, and trees are placed to shade the house in summer. The garden changes with the seasons instead of fighting them.",
+        "fr": "Le jardin est conçu pour vivre avec peu d'eau. Les plantes locales et méditerranéennes sont regroupées selon leurs besoins, des allées en pierre locale relient la maison à la terrasse et à la piscine, et les arbres sont placés pour ombrer la maison l'été. Le jardin suit les saisons au lieu de lutter contre elles.",
+        "ar": "صُممت الحديقة لتعيش بقليل من الماء. جُمعت النباتات المحلية والمتوسطية حسب احتياجاتها، وتربط ممرات من الحجر المحلي البيت بالشرفة والمسبح، ووُضعت الأشجار لتظلل البيت صيفًا. تتغير الحديقة مع الفصول بدل أن تقاومها."
+      },
+      "cover": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&w=1600&q=80",
+      "sections": [
+        {
+          "title": {
+            "en": "Terrace and pool",
+            "fr": "Terrasse et piscine",
+            "ar": "الشرفة والمسبح"
+          },
+          "text": {
+            "en": "A stone terrace that steps down to the water, with shade where you sit.",
+            "fr": "Une terrasse en pierre qui descend vers l'eau, avec de l'ombre là où l'on s'assoit.",
+            "ar": "شرفة حجرية تنزل نحو الماء، مع ظل حيث تجلس."
+          },
+          "images": [
+            {
+              "src": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80",
+              "caption": {
+                "en": "House and pool",
+                "fr": "Maison et piscine",
+                "ar": "البيت والمسبح"
+              }
+            },
+            {
+              "src": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1600&q=80",
+              "caption": {
+                "en": "Evening view",
+                "fr": "Vue du soir",
+                "ar": "منظر مسائي"
+              }
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Planting",
+            "fr": "Plantations",
+            "ar": "الغطاء النباتي"
+          },
+          "text": {
+            "en": "Grasses, olive trees and aromatic plants that need little water once established.",
+            "fr": "Graminées, oliviers et plantes aromatiques peu gourmandes en eau une fois installés.",
+            "ar": "أعشاب وأشجار زيتون ونباتات عطرية تحتاج القليل من الماء بعد أن تستقر."
+          },
+          "images": [
+            {
+              "src": "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=1600&q=80",
+              "caption": {
+                "en": "Garden paths",
+                "fr": "Allées du jardin",
+                "ar": "ممرات الحديقة"
+              }
+            },
+            {
+              "src": "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=1600&q=80",
+              "caption": {
+                "en": "Planting detail",
+                "fr": "Détail des plantations",
+                "ar": "تفاصيل النباتات"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

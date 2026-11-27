@@ -7,6 +7,9 @@
   <meta name="description" content="Profile of Oualid Meghlaoui — architect, designer and 3D artist." />
   <meta name="theme-color" content="#111111" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23111'/%3E%3Ctext x='16' y='23' font-size='20' font-family='sans-serif' font-weight='900' text-anchor='middle' fill='%23eee9e4'%3EO%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@300;400;500;700;900&display=swap" />
   <link rel="stylesheet" href="styles.css" />
   <style>
     body {
@@ -37,7 +40,7 @@
     .site-header {
       transform: translateY(-100px);
     }
-    /* 3D scene: perspective lives on a fixed wrapper, not on <body> */
+    /* 3D scene: perspective lives on a fixed wrapper, not on <body data-page="profile"> */
     #scene {
       position: fixed;
       inset: 0;
@@ -57,9 +60,8 @@
       top: 50%;
       opacity: 0;
     }
-    .about-content h1,
-    .about-content p {
-      color: #eee9e4 !important;
+    .about-content {
+      color: #eee9e4;
     }
     .about-page {
       position: relative;
@@ -70,7 +72,8 @@
       opacity: 0;
     }
     @media (max-width: 768px) {
-      .about-page { padding: 200px 24px 64px; }
+      .about-page { padding: 190px 16px 64px; }
+      .site-header { transform: translateY(-220px); }
     }
     .nav a {
       border: 1px solid rgba(238, 233, 228, 0.06);
@@ -78,10 +81,120 @@
       transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease;
       cursor: pointer;
     }
-    .nav a.inverted {
+    .nav a:hover,
+    .nav a[aria-current="page"] {
       background-color: #eee9e4;
       color: #111 !important;
       border-color: #eee9e4;
+    }
+    .lang-switch,
+    .lang-switch button + button {
+      border-color: rgba(238, 233, 228, 0.2);
+    }
+    .lang-switch button:hover,
+    .lang-switch button[aria-pressed="true"] {
+      background: #eee9e4;
+      color: #111;
+    }
+    .about-content {
+      max-width: 640px;
+      font-family: "Konnect", "Noto Kufi Arabic", sans-serif;
+    }
+    .about-eyebrow {
+      display: inline-block;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      margin-bottom: 14px;
+      opacity: 0.7;
+    }
+    .about-content h1 {
+      font-weight: 900;
+      font-size: clamp(2.8rem, 7vw, 6rem);
+      line-height: 0.95;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+    html[lang="ar"] .about-content h1 { line-height: 1.3; }
+    .about-lead {
+      font-size: 22px;
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.4;
+      margin-bottom: 18px;
+    }
+    .about-bio {
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 1.7;
+      opacity: 0.85;
+    }
+    html[lang="ar"] .about-lead { font-style: normal; line-height: 1.8; }
+    html[lang="ar"] .about-bio { line-height: 1.9; }
+    .about-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 40px;
+      padding-top: 28px;
+      border-top: 1px solid rgba(238, 233, 228, 0.2);
+    }
+    .about-cols h2 {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.6;
+      margin-bottom: 12px;
+      color: #eee9e4;
+    }
+    .about-list { list-style: none; }
+    .about-list li {
+      font-size: 17px;
+      font-weight: 500;
+      padding: 6px 0;
+    }
+    .about-tags {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .about-tags li {
+      font-size: 13px;
+      padding: 6px 10px;
+      border: 1px solid rgba(238, 233, 228, 0.25);
+    }
+    .about-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 40px;
+    }
+    .about-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 20px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: #eee9e4;
+      background: rgba(17, 17, 17, 0.6);
+      border: 1px solid rgba(238, 233, 228, 0.3);
+      cursor: pointer;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    .about-btn:hover { background: #eee9e4; color: #111; }
+    .about-btn:focus-visible { outline: 2px solid #eee9e4; outline-offset: 4px; }
+    .about-btn[disabled] { opacity: 0.5; cursor: default; }
+    .about-btn[disabled]:hover { background: rgba(17, 17, 17, 0.6); color: #eee9e4; }
+    @media (max-width: 768px) {
+      .about-lead { font-size: 18px; }
+      .about-cols { grid-template-columns: 1fr; gap: 24px; }
     }
   </style>
 </head>
@@ -97,10 +210,10 @@
   <header class="site-header">
     <a href="/" class="logo" aria-label="Oualid Meghlaoui — home"><span>O</span><span>U</span><span>A</span><span>L</span><span>I</span><span>D</span><span>&nbsp;</span><span>M</span><span>E</span><span>G</span><span>H</span><span>L</span><span>A</span><span>O</span><span>U</span><span>I</span></a>
 
-    <nav class="nav">
-      <a href="#">RESUME</a>
-      <a href="#">PORTFOLIO</a>
-      <a href="#">CONTACT</a>
+    <nav class="nav" data-i18n-label="nav.label">
+      <a href="profile.html" data-page="profile" data-i18n="nav.resume">RESUME</a>
+      <a href="portfolio.html" data-page="portfolio" data-i18n="nav.portfolio">PORTFOLIO</a>
+      <a href="contact.html" data-page="contact" data-i18n="nav.contact">CONTACT</a>
     </nav>
 
     <div class="meta" id="time-display">Algeria&nbsp;&nbsp;&nbsp;<svg class="hourglass" width="12" height="15" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -112,65 +225,47 @@
   <!-- PROFILE CONTENT -->
   <main class="about-page">
     <section class="about-content">
-      <h1>Profile</h1>
-      <p>Content goes here...</p>
+      <span class="about-eyebrow" data-i18n="nav.resume">RESUME</span>
+      <h1 data-i18n="profile.title">Profile</h1>
+      <p class="about-lead" data-i18n="profile.lead"></p>
+      <p class="about-bio" data-i18n="profile.bio"></p>
+
+      <div class="about-cols">
+        <div>
+          <h2 data-i18n="profile.disciplines">Disciplines</h2>
+          <ul class="about-list">
+            <li data-i18n="profile.d1"></li>
+            <li data-i18n="profile.d2"></li>
+            <li data-i18n="profile.d3"></li>
+            <li data-i18n="profile.d4"></li>
+          </ul>
+        </div>
+        <div>
+          <h2 data-i18n="profile.tools">Tools</h2>
+          <!-- Placeholder list: replace with the software you actually use -->
+          <ul class="about-tags" dir="ltr">
+            <li>AutoCAD</li><li>Revit</li><li>SketchUp</li><li>3ds Max</li><li>Blender</li><li>V-Ray</li><li>Photoshop</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="about-actions">
+        <a class="about-btn" href="portfolio.html"><span data-i18n="profile.seeWork">See the work</span>
+          <svg class="flip-x" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
+        <!-- When the CV is ready: replace this button with <a class="about-btn" href="cv.pdf" download>…</a> -->
+        <button class="about-btn" type="button" disabled data-i18n="profile.cv">CV coming soon</button>
+      </div>
     </section>
   </main>
 
   <!-- GSAP -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="i18n.js"></script>
+  <script src="common.js"></script>
   <script src="3Dshapes.js"></script>
   <script src="holograms.js"></script>
   <script>
     init3DRoomGrid();
-    // Fetch version from Vercel deployments, fallback to GitHub
-    async function updateVersion() {
-      try {
-        // Try Vercel API first
-        const response = await fetch('/api/deployments');
-        if (!response.ok) throw new Error('deployments API ' + response.status);
-        const data = await response.json();
-        if (data.version) {
-          document.getElementById('version-indicator').textContent = data.version;
-          return;
-        }
-      } catch (error) {
-        console.log('Vercel API failed, trying GitHub...');
-      }
-
-      // Fallback to GitHub commits
-      try {
-        const response = await fetch('https://api.github.com/repos/audiolME/oualid-portfolio/commits?per_page=1');
-        const linkHeader = response.headers.get('Link');
-        let commitCount = 1;
-        
-        if (linkHeader) {
-          const match = linkHeader.match(/page=(\d+)>; rel="last"/);
-          if (match) commitCount = parseInt(match[1]);
-        }
-        
-        const minor = Math.floor(commitCount / 100);
-        const patch = (commitCount % 100).toString().padStart(2, '0');
-        const version = `v0.${minor}.${patch}`;
-        
-        document.getElementById('version-indicator').textContent = version;
-      } catch (error) {
-        console.log('Version fetch failed');
-      }
-    }
-    updateVersion();
-
-    function updateTime() {
-      const now = new Date();
-      const timeString = now.toLocaleString('en-US', {timeZone: 'Africa/Algiers', hour12: true, hour: 'numeric', minute: '2-digit'});
-      const dateString = now.toLocaleString('en-US', {timeZone: 'Africa/Algiers', month: 'short', day: 'numeric', year: 'numeric'});
-      document.getElementById('time-display').innerHTML = `Algeria\u00A0\u00A0\u00A0<svg class="hourglass" width="12" height="15" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <polygon points="0,0 16,0 8,10" fill="#eee9e4"/>
-  <polygon points="8,10 0,20 16,20" fill="#eee9e4"/>
-</svg>\u00A0\u00A0\u00A0${timeString}\u00A0\u00A0\u00A0${dateString}`;
-    }
-    updateTime();
-    setInterval(updateTime, 60000);
 
     // Entry animation (no loading overlay)
     const entryTl = gsap.timeline();
@@ -183,31 +278,10 @@
       .to('.grid-plane.wall-right', { opacity: 1, duration: 0.8, ease: 'power2.out' }, 0.36)
       .to('.grid-plane.wall-back',  { opacity: 1, duration: 0.8, ease: 'power2.out' }, 0.48)
       .to('.site-header', { y: 0, duration: 1.8, ease: 'power2.out' }, 0.6)
-      .call(() => {
-        const logoTl = gsap.timeline({ repeat: -1 });
-        logoTl.to('.logo span', { rotationY: 180, duration: 0.5, stagger: 0.1 }, 0)
-          .to('.logo span', { rotationY: 0, duration: 0.5, stagger: 0.1 }, 0.5)
-          .to({}, { duration: 4 }, 1);
-      }, null, 0.9)
+      .call(Site.startLogoFlip, null, 0.9)
       .fromTo('.about-content', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }, 1.6)
       .call(() => { if (typeof initHolograms === 'function') initHolograms(); }, null, 2.0);
 
-    // Nav link invert effect
-    document.querySelectorAll('.nav a').forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        
-        if (link.classList.contains('inverted')) {
-          link.classList.remove('inverted');
-        } else {
-          // Remove inverted from other links
-          document.querySelectorAll('.nav a.inverted').forEach(other => {
-            if (other !== link) other.classList.remove('inverted');
-          });
-          link.classList.add('inverted');
-        }
-      });
-    });
   </script>
 </body>
 </html>

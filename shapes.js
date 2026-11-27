@@ -1,5 +1,6 @@
 // Continuous infinite smooth line drawing - 3 parallel lines
 const lines = [];
+let drawInterval = null;
 const MAX_POINTS_PER_LINE = 200; // Trail disappears after this many points
 const FADE_START_POINT = 140; // Start fading out and dashing at this point count
 
@@ -166,17 +167,26 @@ function generateShapePoints(centerX, centerY, shapeType) {
 function startContinuousDrawing() {
   const svg = document.getElementById('shape-overlay');
   if (!svg) return;
+
+  // Keep exactly one animation loop alive, even after repeated resizes.
+  if (drawInterval !== null) {
+    clearInterval(drawInterval);
+    drawInterval = null;
+  }
+  lines.length = 0;
   
   const width = window.innerWidth;
   const height = window.innerHeight;
+  const marginX = Math.min(300, Math.max(50, width * 0.2));
+  const marginY = Math.min(300, Math.max(50, height * 0.2));
   const shapeTypes = ['circle', 'rectangle', 'triangle', 'square', 'trapezoid', 'pentagon'];
   
   // Create 3 independent lines
   for (let lineIdx = 0; lineIdx < 3; lineIdx++) {
     const line = {
       points: [],
-      x: Math.random() * (width - 600) + 300,
-      y: Math.random() * (height - 600) + 300,
+      x: marginX + Math.random() * Math.max(0, width - marginX * 2),
+      y: marginY + Math.random() * Math.max(0, height - marginY * 2),
       angle: Math.random() * Math.PI * 2,
       polyline: null,
       fadedPolyline: null,
@@ -212,7 +222,7 @@ function startContinuousDrawing() {
   }
   
   // Continuously update all 4 lines
-  const drawLoop = setInterval(() => {
+  drawInterval = setInterval(() => {
     lines.forEach(line => {
       if (line.state === 'roaming') {
         // Slight random angle change for organic curves
@@ -456,9 +466,12 @@ window.addEventListener('resize', () => {
   clearTimeout(resizeTimeout);
   resizeTimeout = setTimeout(() => {
     const svg = document.getElementById('shape-overlay');
-    if (svg) svg.innerHTML = '';
-    // Restart continuous drawing after clearing
-    lines.length = 0; // Clear lines array
+    if (svg) {
+      svg.setAttribute('width', window.innerWidth);
+      svg.setAttribute('height', window.innerHeight);
+      svg.innerHTML = '';
+    }
+    // Restart the existing drawing loop with the new viewport dimensions.
     startContinuousDrawing();
   }, 500);
 });
