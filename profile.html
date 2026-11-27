@@ -12,8 +12,12 @@
     body {
       background: #111 !important;
       color: #eee9e4 !important;
-      perspective: 1400px;
-      perspective-origin: 50% 38%;
+    }
+
+    /* let the document scroll normally once the profile has real content */
+    html, body {
+      height: auto;
+      min-height: 100%;
     }
 
     .site-header {
@@ -33,55 +37,40 @@
     .site-header {
       transform: translateY(-100px);
     }
-    #grid-container {
+    /* 3D scene: perspective lives on a fixed wrapper, not on <body> */
+    #scene {
       position: fixed;
       inset: 0;
+      perspective: 1400px;
+      perspective-origin: 50% 38%;
       pointer-events: none;
       z-index: 0;
+    }
+    #grid-container {
+      position: absolute;
+      inset: 0;
       transform-style: preserve-3d;
     }
     #grid-container .grid-plane {
       position: absolute;
       left: 50%;
       top: 50%;
-      transform-style: preserve-3d;
       opacity: 0;
-    }
-    #grid-container .grid-plane.floor {
-      transform-origin: center;
-    }
-    #grid-container .grid-plane.wall {
-      transform-origin: center;
-    }
-    #grid-container .grid-line {
-      position: absolute;
-      background: rgba(238, 233, 228, 0.08);
-    }
-    #grid-container .floor .grid-line,
-    #grid-container .ceiling .grid-line {
-      background: rgba(238, 233, 228, 0.12);
-    }
-    #grid-container .wall-left .grid-line,
-    #grid-container .wall-right .grid-line {
-      background: rgba(238, 233, 228, 0.06);
-    }
-    #grid-container .wall-back .grid-line {
-      background: rgba(238, 233, 228, 0.03);
-    }
-    #grid-container .grid-line.vertical {
-      width: 1px;
-      height: 100%;
-    }
-    #grid-container .grid-line.horizontal {
-      height: 1px;
-      width: 100%;
     }
     .about-content h1,
     .about-content p {
       color: #eee9e4 !important;
     }
+    .about-page {
+      position: relative;
+      z-index: 2;
+      padding: 140px 48px 80px;
+    }
     .about-content {
       opacity: 0;
+    }
+    @media (max-width: 768px) {
+      .about-page { padding: 200px 24px 64px; }
     }
     .nav a {
       border: 1px solid rgba(238, 233, 228, 0.06);
@@ -99,7 +88,7 @@
 <body>
 
   <!-- 3D Grid Space -->
-    <div id="grid-container"></div>
+  <div id="scene" aria-hidden="true"><div id="grid-container"></div></div>
 
     <!-- Version Indicator -->
     <div id="version-indicator">v0.0.00</div>
@@ -131,6 +120,7 @@
   <!-- GSAP -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script src="3Dshapes.js"></script>
+  <script src="holograms.js"></script>
   <script>
     init3DRoomGrid();
     // Fetch version from Vercel deployments, fallback to GitHub
@@ -186,21 +176,12 @@
     const entryTl = gsap.timeline();
     
     entryTl
-      .fromTo('.grid-plane.floor', 
-        { opacity: 0, scale: 0.85 }, 
-        { opacity: 1, scale: 1, duration: 0.8, ease: 'power2.out' }, 0)
-      .fromTo('.grid-plane.ceiling', 
-        { opacity: 0, scale: 0.85 }, 
-        { opacity: 1, scale: 1, duration: 0.8, ease: 'power2.out' }, 0.12)
-      .fromTo('.grid-plane.wall-left', 
-        { opacity: 0, scale: 0.85 }, 
-        { opacity: 1, scale: 1, duration: 0.8, ease: 'power2.out' }, 0.24)
-      .fromTo('.grid-plane.wall-right', 
-        { opacity: 0, scale: 0.85 }, 
-        { opacity: 1, scale: 1, duration: 0.8, ease: 'power2.out' }, 0.36)
-      .fromTo('.grid-plane.wall-back', 
-        { opacity: 0, scale: 0.85 }, 
-        { opacity: 1, scale: 1, duration: 0.8, ease: 'power2.out' }, 0.48)
+      .fromTo('#grid-container', { z: -420 }, { z: 0, duration: 1.6, ease: 'power3.out' }, 0)
+      .to('.grid-plane.floor',      { opacity: 1, duration: 0.8, ease: 'power2.out' }, 0)
+      .to('.grid-plane.ceiling',    { opacity: 1, duration: 0.8, ease: 'power2.out' }, 0.12)
+      .to('.grid-plane.wall-left',  { opacity: 1, duration: 0.8, ease: 'power2.out' }, 0.24)
+      .to('.grid-plane.wall-right', { opacity: 1, duration: 0.8, ease: 'power2.out' }, 0.36)
+      .to('.grid-plane.wall-back',  { opacity: 1, duration: 0.8, ease: 'power2.out' }, 0.48)
       .to('.site-header', { y: 0, duration: 1.8, ease: 'power2.out' }, 0.6)
       .call(() => {
         const logoTl = gsap.timeline({ repeat: -1 });
@@ -208,7 +189,8 @@
           .to('.logo span', { rotationY: 0, duration: 0.5, stagger: 0.1 }, 0.5)
           .to({}, { duration: 4 }, 1);
       }, null, 0.9)
-      .fromTo('.about-content', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }, 1.6);
+      .fromTo('.about-content', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }, 1.6)
+      .call(() => { if (typeof initHolograms === 'function') initHolograms(); }, null, 2.0);
 
     // Nav link invert effect
     document.querySelectorAll('.nav a').forEach(link => {
