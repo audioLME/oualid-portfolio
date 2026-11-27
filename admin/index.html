@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>Site editor — Oualid Meghlaoui</title>
+</head>
+<body>
+  <!--
+    Project editor (Decap CMS). Open /admin on the live site, sign in with
+    GitHub, edit, then Publish: Decap saves a commit to data/projects.json
+    (and uploads photos to images/uploads) and Vercel redeploys the site.
+  -->
+  <script>window.CMS_MANUAL_INIT = true;</script>
+  <script src="https://unpkg.com/decap-cms@3.17.3/dist/decap-cms.js"></script>
+  <script>
+    // A text field in English, French and Arabic
+    const tr = (name, label, widget = 'string', required = true) => ({
+      name, label, widget: 'object', collapsed: false,
+      fields: [
+        { name: 'en', label: 'English', widget, required },
+        { name: 'fr', label: 'Français', widget, required: false },
+        { name: 'ar', label: 'العربية', widget, required: false }
+      ]
+    });
+
+    const image = {
+      name: 'images', label: 'Photos', widget: 'list', label_singular: 'photo',
+      summary: '{{fields.caption.en}}',
+      fields: [
+        { name: 'src', label: 'Photo', widget: 'image' },
+        tr('caption', 'Caption', 'string', false)
+      ]
+    };
+
+    CMS.init({
+      config: {
+        load_config_file: false,
+        backend: {
+          name: 'github',
+          repo: 'audioLME/oualid-portfolio',
+          branch: 'master',
+          base_url: window.location.origin,
+          auth_endpoint: 'api/auth'
+        },
+        site_url: window.location.origin,
+        display_url: window.location.origin,
+        media_folder: 'images/uploads',
+        public_folder: '/images/uploads',
+        collections: [{
+          name: 'site',
+          label: 'Website',
+          editor: { preview: false },
+          files: [{
+            name: 'projects',
+            label: 'Projects and contact',
+            file: 'data/projects.json',
+            format: 'json',
+            fields: [
+              {
+                name: 'projects', label: 'Projects', label_singular: 'project', widget: 'list',
+                summary: '{{fields.title.en}} ({{fields.year}})',
+                hint: 'Drag projects to change their order on the Portfolio page.',
+                fields: [
+                  { name: 'id', label: 'Link name', widget: 'string',
+                    hint: 'Short, lowercase, no spaces (used in the page address), e.g. villa-oran',
+                    pattern: ['^[a-z0-9-]+$', 'Use only lowercase letters, numbers and dashes'] },
+                  tr('title', 'Title'),
+                  tr('type', 'Type (e.g. Apartment)'),
+                  { name: 'year', label: 'Year', widget: 'string' },
+                  { name: 'area', label: 'Area', widget: 'string', required: false, hint: 'e.g. 110 m²' },
+                  tr('status', 'Status (e.g. Completed)', 'string', false),
+                  tr('summary', 'One-line summary'),
+                  tr('description', 'Description', 'text'),
+                  { name: 'cover', label: 'Cover photo', widget: 'image' },
+                  {
+                    name: 'sections', label: 'Rooms / parts of the project', label_singular: 'room',
+                    widget: 'list', summary: '{{fields.title.en}}',
+                    hint: 'For an apartment: Living room, Kitchen, Bedroom… Each one gets its own text and photos.',
+                    fields: [tr('title', 'Name'), tr('text', 'Text', 'text', false), image]
+                  }
+                ]
+              },
+              {
+                name: 'contact', label: 'Contact', widget: 'object', collapsed: true,
+                fields: [
+                  { name: 'email', label: 'Email', widget: 'string' },
+                  {
+                    name: 'socials', label: 'Social links', label_singular: 'link', widget: 'list',
+                    summary: '{{fields.name}}',
+                    fields: [
+                      { name: 'name', label: 'Name (e.g. Instagram)', widget: 'string' },
+                      { name: 'handle', label: 'Handle shown (e.g. @oualid)', widget: 'string', required: false },
+                      { name: 'url', label: 'Link', widget: 'string' }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }]
+        }]
+      }
+    });
+  </script>
+</body>
+</html>
